@@ -37,7 +37,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center space-x-3 cursor-pointer" onclick="cancelEdit(); switchView('register')">
-                    <img src="unnamed.jpg" onerror="this.outerHTML='<div class=&quot;flex items-center justify-center h-10 px-2 bg-blue-50 text-blue-800 font-black text-lg tracking-tighter rounded-lg border border-blue-100 shadow-sm&quot;>We<i class=&quot;fa-solid fa-cross mx-0.5 text-sm&quot;></i>Story</div>'" alt="WeStory Logo" class="h-10 w-auto object-contain rounded-lg border border-slate-100 shadow-sm">
+                    <img src="unnamed.jpg" alt="WeStory Logo" class="h-10 w-auto object-contain">
                     <div>
                         <span class="text-lg font-bold tracking-wider text-blue-900 block leading-tight">WeStory Camp</span>
                         <span class="text-xs text-slate-500 block hidden sm:block">통합 신청 및 실시간 통계 관리자 대시보드</span>
@@ -78,15 +78,15 @@
 
             <!-- 메인 배너 (배경 이미지 적용) -->
             <!-- 이미지를 바꾸시려면 아래 URL 안의 주소를 원하시는 사진 주소나 파일명(예: bg.jpg)으로 변경하세요 -->
-            <div class="border border-blue-400 rounded-2xl p-6 sm:p-10 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-8 bg-cover bg-center" style="background-image: url('SOS02839_2.jpg');">
-                <!-- 글씨가 잘 보이도록 배경을 살짝 어둡게 누르는 투명 오버레이 -->
-                <div class="absolute inset-0 bg-blue-900/65 backdrop-blur-[2px]"></div>
+            <div class="border border-blue-400 rounded-2xl p-6 sm:p-10 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-8 bg-no-repeat min-h-[320px] sm:min-h-[400px]" style="background-image: url('SOS02839_2.jpg'); background-size: cover; background-position: center 35%;">
+                <!-- 글씨가 잘 보이도록 배경을 살짝 어둡게 누르는 투명 오버레이 (흐림 효과 제거, 투명도 낮춤) -->
+                <div class="absolute inset-0 bg-blue-900/40"></div>
                 
                 <div class="absolute right-0 bottom-0 opacity-10 translate-x-1/4 translate-y-1/4 scale-150 pointer-events-none z-0">
                     <i class="fa-solid fa-users text-9xl"></i>
                 </div>
                 <div class="w-48 sm:w-56 shrink-0 bg-white p-3 rounded-2xl shadow-xl border-4 border-white flex items-center justify-center transform rotate-[-2deg] hover:rotate-0 transition-transform duration-300 relative z-10">
-                    <img src="unnamed.jpg" onerror="this.outerHTML='<div class=&quot;flex items-center justify-center w-full h-24 bg-blue-50 text-blue-800 font-black text-4xl tracking-tighter rounded-xl&quot;>We<i class=&quot;fa-solid fa-cross mx-1 text-2xl&quot;></i>Story</div>'" alt="WeStory Camp" class="w-full h-auto object-contain">
+                    <img src="unnamed.jpg" alt="WeStory Camp" class="w-full h-auto object-contain">
                 </div>
                 <div class="relative z-10 flex-1 text-center md:text-left text-white">
                     <span class="bg-white/20 text-blue-50 text-xs px-3 py-1.5 rounded-full font-semibold uppercase tracking-wider backdrop-blur-sm border border-white/30">2026 다음 세대 연합 캠프</span>
