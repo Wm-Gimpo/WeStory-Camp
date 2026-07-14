@@ -428,7 +428,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100">
                     <!-- 남녀 성비 -->
                     <div class="md:pr-8 pb-6 md:pb-0">
-                        <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-4"><i class="fa-solid fa-venus-mars text-rose-400 mr-1.5"></i>전체 참석자 남녀 성비</h4>
+                        <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-4"><i class="fa-solid fa-venus-mars text-rose-400 mr-1.5"></i>어린이/청소년 남녀 성비</h4>
                         <div id="gender-ratio-container" class="space-y-3 px-2"></div>
                     </div>
                     <!-- 연령별 분포 -->
@@ -938,9 +938,9 @@
                 window.showToast('success', '✅ 전액 완납 처리되었습니다.');
             } catch(e) { window.showToast('error', '처리 실패: 권한을 확인하세요.'); }
         };
-
-        window.syncDashboard = function() {
+        window.syncDashboard = function syncDashboard() {
             let tc=0, ts=0, tl=0, totalMale=0, totalFemale=0;
+            let childMale=0, childFemale=0, studentMale=0, studentFemale=0;
             let elemCount=0, midCount=0, highCount=0, otherCount=0;
             let totalExpectedFee = 0, totalCollectedFee = 0;
             let totalPaidChurches = 0;
@@ -985,6 +985,13 @@
                 // 성비 및 연령대 계산
                 if(r.students) r.students.forEach(s => { 
                     if(s.gender === '남') totalMale++; else if(s.gender === '여') totalFemale++; 
+                    
+                    if(s.type === '어린이') {
+                        if(s.gender === '남') childMale++; else if(s.gender === '여') childFemale++;
+                    } else if(s.type === '청소년') {
+                        if(s.gender === '남') studentMale++; else if(s.gender === '여') studentFemale++;
+                    }
+
                     if(s.grade.startsWith('초')) elemCount++;
                     else if(s.grade.startsWith('중')) midCount++;
                     else if(s.grade.startsWith('고')) highCount++;
@@ -1114,18 +1121,39 @@
             document.getElementById('stat-top-paid-churches').innerText = totalPaidChurches + "개";
             document.getElementById('stat-top-paid-amount').innerText = totalCollectedFee.toLocaleString() + "원";
 
-            // 성비 바
-            const totalPeople = totalMale + totalFemale;
-            let malePct = totalPeople === 0 ? 0 : Math.round((totalMale / totalPeople) * 100);
-            let femalePct = totalPeople === 0 ? 0 : Math.round((totalFemale / totalPeople) * 100);
+            // 성비 바 (어린이 / 청소년 분할)
+            const childTotal = childMale + childFemale;
+            let cMalePct = childTotal === 0 ? 0 : Math.round((childMale / childTotal) * 100);
+            let cFemalePct = childTotal === 0 ? 0 : Math.round((childFemale / childTotal) * 100);
+
+            const studentTotal = studentMale + studentFemale;
+            let sMalePct = studentTotal === 0 ? 0 : Math.round((studentMale / studentTotal) * 100);
+            let sFemalePct = studentTotal === 0 ? 0 : Math.round((studentFemale / studentTotal) * 100);
+
             document.getElementById('gender-ratio-container').innerHTML = `
-                <div class="flex justify-between items-end mb-1.5">
-                    <div class="text-sm font-black text-blue-600"><i class="fa-solid fa-mars mr-1"></i>남성 ${totalMale}명 <span class="text-[11px] font-bold text-blue-400 ml-1 bg-blue-50 px-1.5 py-0.5 rounded">${malePct}%</span></div>
-                    <div class="text-sm font-black text-rose-500"><i class="fa-solid fa-venus mr-1"></i>여성 ${totalFemale}명 <span class="text-[11px] font-bold text-rose-400 ml-1 bg-rose-50 px-1.5 py-0.5 rounded">${femalePct}%</span></div>
+                <div class="mb-4">
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-xs font-bold text-amber-600">어린이 성비</span>
+                        <div class="text-[11px] font-bold">
+                            <span class="text-blue-500">남 ${childMale}명</span> <span class="text-slate-300 mx-1">|</span> <span class="text-rose-500">여 ${childFemale}명</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-3 flex overflow-hidden shadow-inner border border-slate-200">
+                        <div class="bg-gradient-to-r from-blue-400 to-blue-500 h-3 transition-all duration-1000 ease-out" style="width: ${cMalePct}%"></div>
+                        <div class="bg-gradient-to-r from-rose-400 to-rose-500 h-3 transition-all duration-1000 ease-out" style="width: ${cFemalePct}%"></div>
+                    </div>
                 </div>
-                <div class="w-full bg-slate-100 rounded-full h-4 flex overflow-hidden shadow-inner border border-slate-200">
-                    <div class="bg-gradient-to-r from-blue-400 to-blue-500 h-4 transition-all duration-1000 ease-out" style="width: ${malePct}%"></div>
-                    <div class="bg-gradient-to-r from-rose-400 to-rose-500 h-4 transition-all duration-1000 ease-out" style="width: ${femalePct}%"></div>
+                <div>
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-xs font-bold text-blue-600">청소년 성비</span>
+                        <div class="text-[11px] font-bold">
+                            <span class="text-blue-500">남 ${studentMale}명</span> <span class="text-slate-300 mx-1">|</span> <span class="text-rose-500">여 ${studentFemale}명</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-3 flex overflow-hidden shadow-inner border border-slate-200">
+                        <div class="bg-gradient-to-r from-blue-400 to-blue-500 h-3 transition-all duration-1000 ease-out" style="width: ${sMalePct}%"></div>
+                        <div class="bg-gradient-to-r from-rose-400 to-rose-500 h-3 transition-all duration-1000 ease-out" style="width: ${sFemalePct}%"></div>
+                    </div>
                 </div>`;
 
             // 연령별(초/중/고) 바
