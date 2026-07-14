@@ -62,6 +62,16 @@
         <!-- ==================== 신청자 모드 뷰 ==================== -->
         <section id="view-register" class="space-y-8">
             
+            <!-- 외부 링크 버튼 바 (인스타, 일정표) -->
+            <div class="flex justify-end items-center space-x-2">
+                <a href="https://www.instagram.com/westory_camp?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="px-4 py-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center space-x-1.5 transform hover:-translate-y-0.5">
+                    <i class="fa-brands fa-instagram text-sm"></i> <span>공식 인스타그램</span>
+                </a>
+                <a id="btn-schedule-pdf" href="#" target="_blank" class="hidden px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center space-x-1.5 transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-file-pdf text-sm"></i> <span>캠프 일정표 보기</span>
+                </a>
+            </div>
+
             <!-- 관리자 편집 모드 진입 시 표시되는 배지 -->
             <div id="form-mode-badge" class="hidden bg-amber-100 border border-amber-300 text-amber-800 p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm animate-pulse">
                 <div class="flex items-center space-x-3">
@@ -298,6 +308,19 @@
                 </button>
             </div>
 
+            <!-- 관리자 시스템 설정 (일정표 링크 등) -->
+            <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <h4 class="font-bold text-indigo-900 text-sm flex items-center space-x-1.5"><i class="fa-solid fa-gear"></i> <span>캠프 부가 설정 (일정표)</span></h4>
+                    <p class="text-xs text-indigo-700 mt-1">일정표 구글 드라이브 링크 등을 아래에 넣고 <b>저장</b>을 누르면 신청 화면에 버튼이 나타납니다.</p>
+                </div>
+                <div class="flex w-full md:w-auto space-x-2">
+                    <input type="text" id="admin-pdf-link" placeholder="https://..." class="w-full md:w-64 bg-white border border-indigo-200 text-xs px-3 py-2.5 rounded-xl outline-none focus:border-indigo-500 shadow-inner">
+                    <button onclick="savePdfLink()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 shadow-sm">저장</button>
+                    <button onclick="removePdfLink()" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition-all shrink-0 shadow-sm">삭제</button>
+                </div>
+            </div>
+
             <!-- 통계 카드 위젯들 -->
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
                 <div class="bg-white rounded-2xl border border-slate-200 p-4 text-center shadow-sm"><span class="block text-[10px] font-semibold text-slate-400">총 신청 교회</span><span id="stat-total-churches" class="text-xl font-black text-slate-800">0개</span></div>
@@ -446,7 +469,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // 사용자가 제공한 파이어베이스 환경설정
         const firebaseConfig = {
@@ -482,6 +505,23 @@
                 }, (error) => {
                     console.error("Firebase read error", error);
                     showToast('error', '데이터 수신 실패. 데이터베이스 규칙을 확인하세요.');
+                });
+
+                // 설정(일정표 링크 등) 실시간 동기화
+                onSnapshot(doc(db, 'settings', 'general'), (docSnap) => {
+                    const pdfBtn = document.getElementById('btn-schedule-pdf');
+                    const adminInput = document.getElementById('admin-pdf-link');
+                    if (docSnap.exists()) {
+                        const pdfLink = docSnap.data().schedulePdfLink;
+                        if (adminInput) adminInput.value = pdfLink || '';
+                        if (pdfLink && pdfLink.trim() !== '') {
+                            if (pdfBtn) { pdfBtn.href = pdfLink; pdfBtn.classList.remove('hidden'); }
+                        } else {
+                            if (pdfBtn) pdfBtn.classList.add('hidden');
+                        }
+                    } else {
+                        if (pdfBtn) pdfBtn.classList.add('hidden');
+                    }
                 });
             } catch (err) { console.error("Firebase load failed", err); }
             initForm();
@@ -799,6 +839,22 @@
         };
 
         window.closeSuccessModal = function() { document.getElementById('success-modal').classList.add('hidden'); };
+
+        window.savePdfLink = async function() {
+            const link = document.getElementById('admin-pdf-link').value;
+            try {
+                await setDoc(doc(db, 'settings', 'general'), { schedulePdfLink: link }, { merge: true });
+                showToast('success', '✅ 일정표 링크가 저장되어 버튼이 생성되었습니다!');
+            } catch(e) { showToast('error', '저장 실패: 권한을 확인하세요.'); }
+        };
+
+        window.removePdfLink = async function() {
+            document.getElementById('admin-pdf-link').value = '';
+            try {
+                await setDoc(doc(db, 'settings', 'general'), { schedulePdfLink: '' }, { merge: true });
+                showToast('success', '🗑️ 일정표 링크가 삭제되어 버튼이 숨김 처리되었습니다.');
+            } catch(e) { showToast('error', '삭제 실패'); }
+        };
 
         window.updatePaymentAmount = async function(id) {
             const inputEl = document.getElementById(`fee-input-${id}`);
