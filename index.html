@@ -202,7 +202,7 @@
                                 <p class="text-xs text-slate-500"><b>어린이(초1~초6)</b>, <b>청소년(중1~고3)</b> 정보를 정확히 기재해주세요.</p>
                             </div>
                         </div>
-                        <button type="button" onclick="addStudentRow()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-md transition-all flex items-center space-x-1">
+                        <button type="button" onclick="window.addStudentRow()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-md transition-all flex items-center space-x-1">
                             <i class="fa-solid fa-plus"></i> <span>명단 추가</span>
                         </button>
                     </div>
@@ -236,7 +236,7 @@
                                 <p class="text-xs text-slate-500">학생들을 함께 케어할 보조 교사 정보를 작성해 주세요.</p>
                             </div>
                         </div>
-                        <button type="button" onclick="addLeaderRow()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold shadow-md transition-all flex items-center space-x-1">
+                        <button type="button" onclick="window.addLeaderRow()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold shadow-md transition-all flex items-center space-x-1">
                             <i class="fa-solid fa-plus"></i> <span>인솔자 추가</span>
                         </button>
                     </div>
@@ -278,7 +278,7 @@
                     <div class="flex items-center space-x-2 text-blue-600">
                         <i class="fa-solid fa-shield-halved text-xl"></i><h3 class="text-lg font-bold">위스캠프 관리자 인증</h3>
                     </div>
-                    <button onclick="closeAdminAuth()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                    <button onclick="window.closeAdminAuth()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
                 </div>
                 <p class="text-sm text-slate-500 mb-6">통계 대시보드 조회를 위해 관리자 비밀번호를 입력해주세요.</p>
                 <div class="space-y-4">
@@ -286,7 +286,7 @@
                         <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">관리자 비밀번호</label>
                         <input type="password" id="adminPasswordInput" class="block w-full rounded-xl border border-slate-200 p-3 text-sm focus:border-blue-500 outline-none">
                     </div>
-                    <button onclick="verifyAdminPassword()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all">
+                    <button onclick="window.verifyAdminPassword()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all">
                         인증 후 진입 (Enter)
                     </button>
                 </div>
@@ -303,7 +303,7 @@
                     </h2>
                     <p class="text-sm text-slate-500 mt-1">접수된 전체 교회 명단을 통합 및 정렬하고 실시간으로 분석합니다.</p>
                 </div>
-                <button onclick="cancelEdit(); switchView('register');" class="px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold border border-blue-100 shadow-sm flex items-center space-x-1">
+                <button onclick="window.cancelEdit(); window.switchView('register');" class="px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold border border-blue-100 shadow-sm flex items-center space-x-1">
                     <i class="fa-solid fa-plus-circle"></i> <span>새로 작성하기</span>
                 </button>
             </div>
@@ -316,8 +316,8 @@
                 </div>
                 <div class="flex w-full md:w-auto space-x-2">
                     <input type="text" id="admin-pdf-link" placeholder="https://..." class="w-full md:w-64 bg-white border border-indigo-200 text-xs px-3 py-2.5 rounded-xl outline-none focus:border-indigo-500 shadow-inner">
-                    <button onclick="savePdfLink()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 shadow-sm">저장</button>
-                    <button onclick="removePdfLink()" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition-all shrink-0 shadow-sm">삭제</button>
+                    <button onclick="window.savePdfLink()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 shadow-sm">저장</button>
+                    <button onclick="window.removePdfLink()" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition-all shrink-0 shadow-sm">삭제</button>
                 </div>
             </div>
 
@@ -376,7 +376,7 @@
                     </div>
                     <div class="relative w-full md:w-64">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 pointer-events-none"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
-                        <input type="text" id="adminSearchInput" oninput="syncDashboard()" placeholder="교회명 검색..." class="pl-9 w-full rounded-xl border border-slate-200 py-2 px-3 text-xs outline-none focus:border-blue-500 transition-all">
+                        <input type="text" id="adminSearchInput" oninput="window.syncDashboard()" placeholder="교회명 검색..." class="pl-9 w-full rounded-xl border border-slate-200 py-2 px-3 text-xs outline-none focus:border-blue-500 transition-all">
                     </div>
                 </div>
                 <!-- 아코디언 목록 렌더링 공간 -->
@@ -395,7 +395,7 @@
                     </div>
                     <div class="flex items-center space-x-2 w-full sm:w-auto">
                         <span class="text-xs font-bold text-slate-500 shrink-0">필터:</span>
-                        <select id="feeFilterSelect" onchange="syncDashboard()" class="w-full rounded-xl border border-slate-200 py-2 px-3 text-xs outline-none bg-white font-bold text-slate-700 shadow-sm cursor-pointer pr-8">
+                        <select id="feeFilterSelect" onchange="window.syncDashboard()" class="w-full rounded-xl border border-slate-200 py-2 px-3 text-xs outline-none bg-white font-bold text-slate-700 shadow-sm cursor-pointer pr-8">
                             <option value="all">전체 목록 보기</option>
                             <option value="paid">✅ 완납된 교회만</option>
                             <option value="partial">⚠️ 부분입금 교회만</option>
@@ -447,7 +447,7 @@
                 </div>
                 <div class="flex w-full md:w-auto space-x-2">
                     <input type="text" id="share-link-input" readonly value="https://wm-gimpo.github.io/WeStory-Camp/" class="w-full md:w-64 bg-white border border-blue-200 text-xs px-3 py-2.5 rounded-xl outline-none font-mono text-slate-500 shadow-inner">
-                    <button onclick="copyFixedLink()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md transition-all shrink-0">
+                    <button onclick="window.copyFixedLink()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md transition-all shrink-0">
                         <i class="fa-solid fa-copy mr-1"></i> 복사
                     </button>
                 </div>
@@ -460,7 +460,7 @@
                 <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 animate-bounce"><i class="fa-solid fa-circle-check"></i></div>
                 <h3 class="text-2xl font-black text-slate-900 mb-2">접수 완료!</h3>
                 <p class="text-sm text-slate-500 mb-6">성공적으로 위스캠프 서버에 등록되었습니다.</p>
-                <button onclick="closeSuccessModal()" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all">확인</button>
+                <button onclick="window.closeSuccessModal()" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all">확인</button>
             </div>
         </div>
 
@@ -500,11 +500,11 @@
                     registrations = [];
                     snapshot.forEach((docSnap) => { registrations.push({ id: docSnap.id, ...docSnap.data() }); });
                     if(document.getElementById('view-admin').classList.contains('hidden') === false){
-                        syncDashboard();
+                        window.syncDashboard();
                     }
                 }, (error) => {
                     console.error("Firebase read error", error);
-                    showToast('error', '데이터 수신 실패. 데이터베이스 규칙을 확인하세요.');
+                    window.showToast('error', '데이터 수신 실패. 데이터베이스 규칙을 확인하세요.');
                 });
 
                 // 설정(일정표 링크 등) 실시간 동기화
@@ -542,7 +542,7 @@
         };
 
         document.getElementById('adminPasswordInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') verifyAdminPassword();
+            if (e.key === 'Enter') window.verifyAdminPassword();
         });
 
         window.switchView = function(view) {
@@ -562,21 +562,21 @@
                 document.getElementById('view-admin').classList.remove('hidden');
                 document.getElementById('btn-nav-admin').classList.replace('bg-transparent', 'bg-blue-600');
                 document.getElementById('btn-nav-admin').classList.replace('text-slate-600', 'text-white');
-                syncDashboard();
+                window.syncDashboard();
                 window.scrollTo(0,0);
             }
         };
 
         window.openAdminAuth = function() {
-            if (sessionStorage.getItem('westory_admin') === 'ok') switchView('admin');
+            if (sessionStorage.getItem('westory_admin') === 'ok') window.switchView('admin');
             else { document.getElementById('admin-auth-modal').classList.remove('hidden'); document.getElementById('adminPasswordInput').focus(); }
         };
         window.closeAdminAuth = function() { document.getElementById('admin-auth-modal').classList.add('hidden'); document.getElementById('adminPasswordInput').value = ''; };
         window.verifyAdminPassword = function() {
             if (document.getElementById('adminPasswordInput').value === '5352') {
                 sessionStorage.setItem('westory_admin', 'ok');
-                closeAdminAuth(); switchView('admin'); showToast('success', '관리자 접속 완료!');
-            } else { showToast('error', '비밀번호가 틀렸습니다.'); }
+                window.closeAdminAuth(); window.switchView('admin'); window.showToast('success', '관리자 접속 완료!');
+            } else { window.showToast('error', '비밀번호가 틀렸습니다.'); }
         };
 
         window.getGradeOptions = function(typeValue, selectedValue = '') {
@@ -608,7 +608,7 @@
                 <td class="py-2 px-3 border-b"><select class="sync-type w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="어린이" ${data.type==='어린이'?'selected':''}>어린이</option><option value="청소년" ${data.type==='청소년'?'selected':''}>청소년</option></select></td>
                 <td class="py-2 px-3 border-b"><select class="sync-grade w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required>${window.getGradeOptions(data.type, data.grade)}</select></td>
                 <td class="py-2 px-3 border-b"><input type="text" class="sync-notes w-full border rounded p-2 text-sm outline-none" value="${data.notes}"></td>
-                <td class="py-2 px-3 border-b text-center"><button type="button" onclick="removeRow('student', ${studentRowIndex})" class="text-rose-500"><i class="fa-solid fa-trash-can"></i></button></td>
+                <td class="py-2 px-3 border-b text-center"><button type="button" onclick="window.removeRow('student', ${studentRowIndex})" class="text-rose-500"><i class="fa-solid fa-trash-can"></i></button></td>
             `;
             tbody.appendChild(tr);
 
@@ -617,7 +617,7 @@
             card.id = `student-card-${studentRowIndex}`;
             card.className = "bg-slate-50 rounded-xl p-4 border border-slate-200 relative";
             card.innerHTML = `
-                <button type="button" onclick="removeRow('student', ${studentRowIndex})" class="absolute top-3 right-3 text-rose-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
+                <button type="button" onclick="window.removeRow('student', ${studentRowIndex})" class="absolute top-3 right-3 text-rose-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
                 <div class="text-xs font-bold text-slate-500 mb-2 card-idx"></div>
                 <div class="grid grid-cols-2 gap-2 mb-2">
                     <div><input type="text" class="sync-name w-full border rounded p-2 text-sm outline-none" placeholder="이름" value="${data.name}" required></div>
@@ -651,7 +651,7 @@
                 <td class="py-2 px-3 border-b"><select class="sync-title w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required>${titleOptions.replace(`value="${data.title}"`, `value="${data.title}" selected`)}</select></td>
                 <td class="py-2 px-3 border-b text-center"><input type="checkbox" class="sync-main w-5 h-5 text-blue-600 rounded cursor-pointer" ${data.isMain ? 'checked' : ''}></td>
                 <td class="py-2 px-3 border-b"><input type="text" class="sync-notes w-full border rounded p-2 text-sm outline-none" value="${data.notes}"></td>
-                <td class="py-2 px-3 border-b text-center"><button type="button" onclick="removeRow('leader', ${leaderRowIndex})" class="text-rose-500"><i class="fa-solid fa-trash-can"></i></button></td>
+                <td class="py-2 px-3 border-b text-center"><button type="button" onclick="window.removeRow('leader', ${leaderRowIndex})" class="text-rose-500"><i class="fa-solid fa-trash-can"></i></button></td>
             `;
             tbody.appendChild(tr);
 
@@ -660,7 +660,7 @@
             card.id = `leader-card-${leaderRowIndex}`;
             card.className = "bg-slate-50 rounded-xl p-4 border border-slate-200 relative";
             card.innerHTML = `
-                <button type="button" onclick="removeRow('leader', ${leaderRowIndex})" class="absolute top-3 right-3 text-rose-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
+                <button type="button" onclick="window.removeRow('leader', ${leaderRowIndex})" class="absolute top-3 right-3 text-rose-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
                 <div class="text-xs font-bold text-slate-500 mb-2 card-idx"></div>
                 <div class="grid grid-cols-2 gap-2 mb-2">
                     <div><input type="text" class="sync-name w-full border rounded p-2 text-sm outline-none" placeholder="이름" value="${data.name}" required></div>
@@ -701,12 +701,12 @@
                 if (rEl && cEl) {
                     const eventType = (cls === 'sync-type' || cls === 'sync-grade' || cls === 'sync-gender' || cls === 'sync-title') ? 'change' : 'input';
                     rEl.addEventListener(eventType, () => { 
-                        cEl.value = rEl.value; // BUG FIX: 모바일-PC간 타입(어린이/청소년) 텍스트 동기화
+                        cEl.value = rEl.value; 
                         if (cls === 'sync-type' && isStudent) updateGradeDropdowns(row, card, rEl.value);
                         window.updateLiveCounters(); 
                     });
                     cEl.addEventListener(eventType, () => { 
-                        rEl.value = cEl.value; // BUG FIX: 모바일-PC간 타입(어린이/청소년) 텍스트 동기화
+                        rEl.value = cEl.value; 
                         if (cls === 'sync-type' && isStudent) updateGradeDropdowns(row, card, cEl.value);
                         window.updateLiveCounters(); 
                     });
@@ -740,7 +740,7 @@
         };
 
         function initForm() {
-            addStudentRow(); addLeaderRow();
+            window.addStudentRow(); window.addLeaderRow();
         }
 
         window.toggleAccordion = function(id) {
@@ -764,13 +764,13 @@
             document.getElementById('student-tbody').innerHTML = ''; document.getElementById('student-cards').innerHTML = '';
             document.getElementById('leader-tbody').innerHTML = ''; document.getElementById('leader-cards').innerHTML = '';
             
-            if (reg.students) reg.students.forEach(s => addStudentRow(s));
-            if (reg.leaders) reg.leaders.forEach(l => addLeaderRow(l));
+            if (reg.students) reg.students.forEach(s => window.addStudentRow(s));
+            if (reg.leaders) reg.leaders.forEach(l => window.addLeaderRow(l));
 
             document.getElementById('submit-btn-text').innerText = "수정된 내용으로 업데이트";
             document.getElementById('form-mode-badge').classList.remove('hidden');
-            switchView('register');
-            showToast('info', '수정 모드가 활성화되었습니다.');
+            window.switchView('register');
+            window.showToast('info', '수정 모드가 활성화되었습니다.');
         };
 
         window.cancelEdit = function() {
@@ -788,8 +788,8 @@
             if(confirm("정말 이 신청명단을 영구 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다!")) {
                 try {
                     await deleteDoc(doc(db, 'registrations', id));
-                    showToast('success', '명단이 영구 삭제되었습니다.');
-                } catch(e) { showToast('error', '삭제 실패: 데이터베이스 권한을 확인하세요.'); }
+                    window.showToast('success', '명단이 영구 삭제되었습니다.');
+                } catch(e) { window.showToast('error', '삭제 실패: 데이터베이스 권한을 확인하세요.'); }
             }
         };
 
@@ -826,16 +826,16 @@
             try {
                 if (window.editingId) {
                     await updateDoc(doc(db, 'registrations', window.editingId), payload);
-                    showToast('success', '성공적으로 내용이 갱신되었습니다!');
-                    cancelEdit(); switchView('admin');
+                    window.showToast('success', '성공적으로 내용이 갱신되었습니다!');
+                    window.cancelEdit(); window.switchView('admin');
                 } else {
                     payload.createdAt = new Date().toISOString();
                     payload.paidAmount = 0; // 초기 입금액 0
                     await addDoc(collection(db, 'registrations'), payload);
-                    cancelEdit();
+                    window.cancelEdit();
                     document.getElementById('success-modal').classList.remove('hidden');
                 }
-            } catch(err) { showToast('error', '제출 실패! 파이어베이스 연결을 확인하세요.'); }
+            } catch(err) { window.showToast('error', '제출 실패! 파이어베이스 연결을 확인하세요.'); }
         };
 
         window.closeSuccessModal = function() { document.getElementById('success-modal').classList.add('hidden'); };
@@ -844,16 +844,16 @@
             const link = document.getElementById('admin-pdf-link').value;
             try {
                 await setDoc(doc(db, 'settings', 'general'), { schedulePdfLink: link }, { merge: true });
-                showToast('success', '✅ 일정표 링크가 저장되어 버튼이 생성되었습니다!');
-            } catch(e) { showToast('error', '저장 실패: 권한을 확인하세요.'); }
+                window.showToast('success', '✅ 일정표 링크가 저장되어 버튼이 생성되었습니다!');
+            } catch(e) { window.showToast('error', '저장 실패: 권한을 확인하세요.'); }
         };
 
         window.removePdfLink = async function() {
             document.getElementById('admin-pdf-link').value = '';
             try {
                 await setDoc(doc(db, 'settings', 'general'), { schedulePdfLink: '' }, { merge: true });
-                showToast('success', '🗑️ 일정표 링크가 삭제되어 버튼이 숨김 처리되었습니다.');
-            } catch(e) { showToast('error', '삭제 실패'); }
+                window.showToast('success', '🗑️ 일정표 링크가 삭제되어 버튼이 숨김 처리되었습니다.');
+            } catch(e) { window.showToast('error', '삭제 실패'); }
         };
 
         window.updatePaymentAmount = async function(id) {
@@ -863,15 +863,15 @@
             
             try {
                 await updateDoc(doc(db, 'registrations', id), { paidAmount: val });
-                showToast('success', '✅ 입금액이 저장되었습니다.');
-            } catch(e) { showToast('error', '저장 실패: 권한을 확인하세요.'); }
+                window.showToast('success', '✅ 입금액이 저장되었습니다.');
+            } catch(e) { window.showToast('error', '저장 실패: 권한을 확인하세요.'); }
         };
 
         window.markAsFullyPaid = async function(id, expectedFee) {
             try {
                 await updateDoc(doc(db, 'registrations', id), { paidAmount: expectedFee });
-                showToast('success', '✅ 전액 완납 처리되었습니다.');
-            } catch(e) { showToast('error', '처리 실패: 권한을 확인하세요.'); }
+                window.showToast('success', '✅ 전액 완납 처리되었습니다.');
+            } catch(e) { window.showToast('error', '처리 실패: 권한을 확인하세요.'); }
         };
 
         window.syncDashboard = function syncDashboard() {
@@ -927,24 +927,20 @@
                 });
                 if(r.leaders) r.leaders.forEach(l => { if(l.gender === '남') totalMale++; else if(l.gender === '여') totalFemale++; });
 
-                // 회비 테이블 렌더링 (필터 적용 및 원클릭 버튼/UX 적용)
+                // 회비 테이블 렌더링
                 let showFeeRow = true;
                 if (feeFilter === 'paid' && !isFullyPaid) showFeeRow = false;
                 if (feeFilter === 'partial' && !isPartial) showFeeRow = false;
                 if (feeFilter === 'unpaid' && isFullyPaid) showFeeRow = false;
 
                 if (showFeeRow) {
-                    // 완납 여부에 따른 완납처리 버튼 동적 생성 (모바일 직관성 강화)
                     let fullPayBtnHTML = '';
                     if (isFullyPaid) {
-                        // 이미 완납된 경우: 회색 비활성화 버튼
                         fullPayBtnHTML = `<button disabled class="bg-slate-100 text-slate-400 px-2 py-1 rounded text-[10px] font-bold border border-slate-200 cursor-not-allowed shrink-0">완납됨</button>`;
                     } else {
-                        // 완납 전인 경우: 초록색 활성화 버튼
-                        fullPayBtnHTML = `<button onclick="markAsFullyPaid('${r.id}', ${expectedFee})" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[10px] font-bold border border-emerald-200 transition-colors shrink-0">완납처리</button>`;
+                        fullPayBtnHTML = `<button onclick="window.markAsFullyPaid('${r.id}', ${expectedFee})" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[10px] font-bold border border-emerald-200 transition-colors shrink-0">완납처리</button>`;
                     }
 
-                    // [수정된 부분] 미납 잔액 표시용 텍스트 및 폰트 색상(클래스) 변수 선언
                     let remainingText = remaining > 0 ? remaining.toLocaleString() + "원" : "0원";
                     let remainingClass = remaining > 0 ? "font-bold text-rose-500" : "font-black text-blue-600";
 
@@ -958,7 +954,7 @@
                             <td class="py-2 px-2 text-center">
                                 <div class="flex items-center justify-center space-x-1">
                                     <input type="number" id="fee-input-${r.id}" value="0" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') this.value='0';" class="w-16 border border-slate-300 rounded px-1.5 py-1 text-[11px] outline-none focus:border-blue-500 text-right font-bold text-slate-700 bg-white" placeholder="총액">
-                                    <button onclick="updatePaymentAmount('${r.id}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold border border-blue-200 transition-colors shrink-0">저장</button>
+                                    <button onclick="window.updatePaymentAmount('${r.id}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold border border-blue-200 transition-colors shrink-0">저장</button>
                                     ${fullPayBtnHTML}
                                     <div class="ml-1 pl-1.5 border-l border-slate-200 flex flex-col text-left justify-center min-w-[65px]">
                                         <span class="text-[8px] text-slate-400 font-bold mb-0.5">누적입금</span>
@@ -1014,7 +1010,7 @@
 
                 orgList.innerHTML += `
                     <div class="border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
-                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between cursor-pointer group" onclick="toggleAccordion('${r.id}')">
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between cursor-pointer group" onclick="window.toggleAccordion('${r.id}')">
                             <div class="flex items-center mb-2 md:mb-0">
                                 <h5 class="font-bold text-slate-800 text-sm mr-2 group-hover:text-blue-600 transition-colors">${r.churchName}</h5>
                                 <span class="text-[10px] text-slate-400 truncate max-w-[150px] sm:max-w-[200px] border-l border-slate-200 pl-2"><i class="fa-solid fa-location-dot mr-1"></i>${r.churchAddress}</span>
@@ -1030,8 +1026,8 @@
                             <div class="px-6 pb-6 bg-slate-50/50 border-t border-slate-100 pt-4 shadow-inner">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">${studentsHtml}${leadersHtml}</div>
                                 <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-slate-200">
-                                    <button type="button" onclick="event.stopPropagation(); editRegistration('${r.id}')" class="px-5 py-2.5 bg-white hover:bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center"><i class="fa-solid fa-pen-to-square mr-1.5"></i> 이 명단 수정하기</button>
-                                    <button type="button" onclick="event.stopPropagation(); deleteRegistration('${r.id}')" class="px-5 py-2.5 bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center"><i class="fa-solid fa-trash-can mr-1.5"></i> 영구 삭제하기</button>
+                                    <button type="button" onclick="event.stopPropagation(); window.editRegistration('${r.id}')" class="px-5 py-2.5 bg-white hover:bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center"><i class="fa-solid fa-pen-to-square mr-1.5"></i> 이 명단 수정하기</button>
+                                    <button type="button" onclick="event.stopPropagation(); window.deleteRegistration('${r.id}')" class="px-5 py-2.5 bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center"><i class="fa-solid fa-trash-can mr-1.5"></i> 영구 삭제하기</button>
                                 </div>
                             </div>
                         </div>
@@ -1085,36 +1081,55 @@
             `;
         }
 
-        // [추가된 부분] 모바일 뒤로가기 및 새로고침 방지 로직
+        window.copyFixedLink = function() {
+            const input = document.getElementById('share-link-input');
+            input.select(); input.setSelectionRange(0, 99999);
+            try { document.execCommand('copy'); window.showToast('success', '공식 신청 링크가 안전하게 복사되었습니다!'); } 
+            catch(err) { window.showToast('error', '복사 실패'); }
+        };
+
+        // [완벽 수정된 모바일 뒤로가기 및 새로고침 방지 로직]
         let isNavigatingAway = false;
-        history.pushState(null, null, location.href);
-        window.addEventListener('popstate', function() {
-            if (isNavigatingAway) return; // 이미 나가기로 한 경우 중복 실행 방지
+        
+        // 모바일은 화면을 터치해야만 뒤로가기 방지가 켜집니다 (화면 터치 감지)
+        const initHistoryStack = function() {
+            if (!window.historyPushed) {
+                history.pushState(null, null, location.href);
+                window.historyPushed = true;
+            }
+        };
+        document.body.addEventListener('touchstart', initHistoryStack, { once: true });
+        document.body.addEventListener('click', initHistoryStack, { once: true });
+
+        window.addEventListener('popstate', function(event) {
+            if (isNavigatingAway) return;
 
             const viewAdmin = document.getElementById('view-admin');
             
-            // 1. 관리자 모드에서 뒤로가기 누른 경우 -> 관리자 창 닫고 참가신청 화면으로
-            if (!viewAdmin.classList.contains('hidden')) {
-                switchView('register');
-                history.pushState(null, null, location.href); // 상태 복구
+            // 1. 관리자 모드에서 스와이프(뒤로가기) 누름 -> 튕기지 않고 신청화면으로 복귀
+            if (viewAdmin && !viewAdmin.classList.contains('hidden')) {
+                window.switchView('register');
+                history.pushState(null, null, location.href);
             } 
-            // 2. 참가신청 창에서 뒤로가기 누른 경우 -> 실수 방지 확인 팝업
+            // 2. 신청 화면에서 스와이프(뒤로가기) 누름 -> 실수 방지 팝업
             else {
                 if (confirm("작성 중인 내용이 모두 초기화될 수 있습니다.\n정말 뒤로 가시겠습니까?")) {
                     isNavigatingAway = true;
-                    history.back(); // 확인 시 진짜 이탈 허용
+                    history.back(); // 진짜 바탕화면으로 나가기
                 } else {
-                    history.pushState(null, null, location.href); // 취소 시 페이지 유지
+                    history.pushState(null, null, location.href); // 안 나가고 버티기
                 }
             }
         });
 
-        // PC 환경에서 새로고침/창 닫기 실수 방지
+        // PC 환경에서 새로고침/창 닫기 방지
         window.addEventListener('beforeunload', function(e) {
             const viewAdmin = document.getElementById('view-admin');
-            if (viewAdmin.classList.contains('hidden')) { // 신청화면에서만 경고
+            if (viewAdmin && viewAdmin.classList.contains('hidden')) {
                 e.preventDefault();
                 e.returnValue = '';
             }
         });
+    </script>
+</body>
 </html>
