@@ -638,7 +638,7 @@
         };
         window.closeAdminAuth = function() { document.getElementById('admin-auth-modal').classList.add('hidden'); document.getElementById('adminPasswordInput').value = ''; };
         window.verifyAdminPassword = function() {
-            if (document.getElementById('adminPasswordInput').value === '5352') {
+            if (document.getElementById('adminPasswordInput').value === '0810') {
                 sessionStorage.setItem('westory_admin', 'ok');
                 window.closeAdminAuth(); window.switchView('admin'); window.showToast('success', '관리자 접속 완료!');
             } else { window.showToast('error', '비밀번호가 틀렸습니다.'); }
