@@ -78,7 +78,7 @@
 
             <!-- 메인 배너 (배경 이미지 적용) -->
             <!-- 이미지를 바꾸시려면 아래 URL 안의 주소를 원하시는 사진 주소나 파일명(예: bg.jpg)으로 변경하세요 -->
-            <div class="border border-blue-400 rounded-2xl p-6 sm:p-10 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-8 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1529070538774-1843cb3265df?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');">
+            <div class="border border-blue-400 rounded-2xl p-6 sm:p-10 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-8 bg-cover bg-center" style="background-image: url('SOS02839_2.jpg');">
                 <!-- 글씨가 잘 보이도록 배경을 살짝 어둡게 누르는 투명 오버레이 -->
                 <div class="absolute inset-0 bg-blue-900/65 backdrop-blur-[2px]"></div>
                 
@@ -402,8 +402,18 @@
 
             <!-- 남녀 성비 요약 -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mt-6">
-                <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-4"><i class="fa-solid fa-venus-mars text-rose-400 mr-1.5"></i>전체 참석자 남녀 성비 현황</h4>
-                <div id="gender-ratio-container" class="space-y-3 px-2"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                    <!-- 남녀 성비 -->
+                    <div class="md:pr-8 pb-6 md:pb-0">
+                        <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-4"><i class="fa-solid fa-venus-mars text-rose-400 mr-1.5"></i>전체 참석자 남녀 성비</h4>
+                        <div id="gender-ratio-container" class="space-y-3 px-2"></div>
+                    </div>
+                    <!-- 연령별 분포 -->
+                    <div class="md:pl-8 pt-6 md:pt-0">
+                        <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-4"><i class="fa-solid fa-graduation-cap text-blue-500 mr-1.5"></i>학생 연령별 세부 현황</h4>
+                        <div id="age-ratio-container" class="space-y-3 px-2"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- 고정 링크 공유 -->
@@ -413,7 +423,7 @@
                     <p class="text-xs text-blue-700 mt-1">아래 버튼을 눌러 복사한 뒤, 참석 대상자들에게 배포하세요.</p>
                 </div>
                 <div class="flex w-full md:w-auto space-x-2">
-                    <input type="text" id="share-link-input" readonly value="https://westroycamp.netlify.app/" class="w-full md:w-64 bg-white border border-blue-200 text-xs px-3 py-2.5 rounded-xl outline-none font-mono text-slate-500 shadow-inner">
+                    <input type="text" id="share-link-input" readonly value="https://wm-gimpo.github.io/WeStory-Camp/" class="w-full md:w-64 bg-white border border-blue-200 text-xs px-3 py-2.5 rounded-xl outline-none font-mono text-slate-500 shadow-inner">
                     <button onclick="copyFixedLink()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md transition-all shrink-0">
                         <i class="fa-solid fa-copy mr-1"></i> 복사
                     </button>
@@ -810,6 +820,7 @@
 
         window.syncDashboard = function syncDashboard() {
             let tc=0, ts=0, tl=0, totalMale=0, totalFemale=0;
+            let elemCount=0, midCount=0, highCount=0, otherCount=0;
             let totalExpectedFee = 0, totalCollectedFee = 0;
             let totalPaidChurches = 0;
             
@@ -850,21 +861,14 @@
                     paymentStatusBadge = '<span class="px-2 py-1 bg-slate-100 text-slate-500 text-[10px] rounded font-bold border border-slate-200">⏳ 미납</span>';
                 }
 
-                // 남은 금액 색상 지정 로직
-                let remainingClass = 'text-slate-400';
-                let remainingText = '0원';
-                if (expectedFee > 0) {
-                    if (remaining > 0) {
-                        remainingClass = 'text-rose-500 font-bold'; // 빨간색 미납액
-                        remainingText = remaining.toLocaleString() + '원';
-                    } else {
-                        remainingClass = 'text-blue-600 font-black'; // 파란색 완납
-                        remainingText = '0원';
-                    }
-                }
-
-                // 성비 계산
-                if(r.students) r.students.forEach(s => { if(s.gender === '남') totalMale++; else if(s.gender === '여') totalFemale++; });
+                // 성비 및 연령대 계산
+                if(r.students) r.students.forEach(s => { 
+                    if(s.gender === '남') totalMale++; else if(s.gender === '여') totalFemale++; 
+                    if(s.grade.startsWith('초')) elemCount++;
+                    else if(s.grade.startsWith('중')) midCount++;
+                    else if(s.grade.startsWith('고')) highCount++;
+                    else otherCount++;
+                });
                 if(r.leaders) r.leaders.forEach(l => { if(l.gender === '남') totalMale++; else if(l.gender === '여') totalFemale++; });
 
                 // 회비 테이블 렌더링 (필터 적용 및 원클릭 버튼/UX 적용)
@@ -883,6 +887,10 @@
                         // 완납 전인 경우: 초록색 활성화 버튼
                         fullPayBtnHTML = `<button onclick="markAsFullyPaid('${r.id}', ${expectedFee})" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[10px] font-bold border border-emerald-200 transition-colors shrink-0">완납처리</button>`;
                     }
+
+                    // [수정된 부분] 미납 잔액 표시용 텍스트 및 폰트 색상(클래스) 변수 선언
+                    let remainingText = remaining > 0 ? remaining.toLocaleString() + "원" : "0원";
+                    let remainingClass = remaining > 0 ? "font-bold text-rose-500" : "font-black text-blue-600";
 
                     feeBody.innerHTML += `
                         <tr class="hover:bg-slate-50 transition-colors">
@@ -999,6 +1007,26 @@
                     <div class="bg-gradient-to-r from-blue-400 to-blue-500 h-4 transition-all duration-1000 ease-out" style="width: ${malePct}%"></div>
                     <div class="bg-gradient-to-r from-rose-400 to-rose-500 h-4 transition-all duration-1000 ease-out" style="width: ${femalePct}%"></div>
                 </div>`;
+
+            // 연령별(초/중/고) 바
+            const totalStudents = elemCount + midCount + highCount + otherCount;
+            let elemPct = totalStudents === 0 ? 0 : Math.round((elemCount / totalStudents) * 100);
+            let midPct = totalStudents === 0 ? 0 : Math.round((midCount / totalStudents) * 100);
+            let highPct = totalStudents === 0 ? 0 : Math.round((highCount / totalStudents) * 100);
+            
+            document.getElementById('age-ratio-container').innerHTML = `
+                <div class="flex justify-between items-end mb-1.5 text-xs">
+                    <div class="font-bold text-amber-600"><span class="w-2.5 h-2.5 inline-block bg-amber-400 rounded-full mr-1 shadow-sm"></span>초등 ${elemCount}명</div>
+                    <div class="font-bold text-blue-600"><span class="w-2.5 h-2.5 inline-block bg-blue-500 rounded-full mr-1 shadow-sm"></span>중등 ${midCount}명</div>
+                    <div class="font-bold text-purple-600"><span class="w-2.5 h-2.5 inline-block bg-purple-500 rounded-full mr-1 shadow-sm"></span>고등 ${highCount}명</div>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-4 flex overflow-hidden shadow-inner border border-slate-200">
+                    <div class="bg-amber-400 h-4 transition-all duration-1000 ease-out" style="width: ${elemPct}%"></div>
+                    <div class="bg-blue-500 h-4 transition-all duration-1000 ease-out" style="width: ${midPct}%"></div>
+                    <div class="bg-purple-500 h-4 transition-all duration-1000 ease-out" style="width: ${highPct}%"></div>
+                </div>
+                <div class="text-[10px] text-slate-400 mt-1.5 text-right font-medium">※ 전체 학생 ${totalStudents}명 기준 (어린이/청소년)</div>
+            `;
         }
 
         window.copyFixedLink = function() {
