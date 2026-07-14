@@ -1085,12 +1085,36 @@
             `;
         }
 
-        window.copyFixedLink = function() {
-            const input = document.getElementById('share-link-input');
-            input.select(); input.setSelectionRange(0, 99999);
-            try { document.execCommand('copy'); showToast('success', '공식 신청 링크가 안전하게 복사되었습니다!'); } 
-            catch(err) { showToast('error', '복사 실패'); }
-        };
-    </script>
-</body>
+        // [추가된 부분] 모바일 뒤로가기 및 새로고침 방지 로직
+        let isNavigatingAway = false;
+        history.pushState(null, null, location.href);
+        window.addEventListener('popstate', function() {
+            if (isNavigatingAway) return; // 이미 나가기로 한 경우 중복 실행 방지
+
+            const viewAdmin = document.getElementById('view-admin');
+            
+            // 1. 관리자 모드에서 뒤로가기 누른 경우 -> 관리자 창 닫고 참가신청 화면으로
+            if (!viewAdmin.classList.contains('hidden')) {
+                switchView('register');
+                history.pushState(null, null, location.href); // 상태 복구
+            } 
+            // 2. 참가신청 창에서 뒤로가기 누른 경우 -> 실수 방지 확인 팝업
+            else {
+                if (confirm("작성 중인 내용이 모두 초기화될 수 있습니다.\n정말 뒤로 가시겠습니까?")) {
+                    isNavigatingAway = true;
+                    history.back(); // 확인 시 진짜 이탈 허용
+                } else {
+                    history.pushState(null, null, location.href); // 취소 시 페이지 유지
+                }
+            }
+        });
+
+        // PC 환경에서 새로고침/창 닫기 실수 방지
+        window.addEventListener('beforeunload', function(e) {
+            const viewAdmin = document.getElementById('view-admin');
+            if (viewAdmin.classList.contains('hidden')) { // 신청화면에서만 경고
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
 </html>
