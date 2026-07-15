@@ -47,7 +47,7 @@
                     <button id="btn-nav-register" onclick="window.cancelEdit(); window.switchView('register')" class="px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors">
                         <i class="fa-solid fa-pen-to-square mr-1"></i> 신청하기
                     </button>
-                    <!-- [신규] 후원하기 전용 버튼 -->
+                    <!-- 후원하기 버튼 -->
                     <button id="btn-nav-donate" onclick="window.cancelEdit(); window.switchView('donate')" class="px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-pink-600 bg-transparent hover:bg-pink-50 border border-pink-200 transition-colors flex items-center">
                         <i class="fa-solid fa-hand-holding-heart mr-1"></i> 후원하기
                     </button>
@@ -100,7 +100,7 @@
                 </div>
                 <div class="relative z-10 flex-1 text-center md:text-left text-white break-keep">
                     <span class="bg-white/20 text-blue-50 text-xs px-3 py-1.5 rounded-full font-semibold uppercase tracking-wider backdrop-blur-sm border border-white/30">2026 다음 세대 연합 캠프</span>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold mt-4 leading-tight drop-shadow-md break-keep">WeStory Camp<br class="sm:hidden"> 참가 등록</h1>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold mt-4 leading-tight drop-shadow-md break-keep">WeStory Camp<br>참가 등록</h1>
                     <p class="mt-3 text-blue-50 text-sm sm:text-base opacity-90 drop-shadow break-keep">교회의 미래인 다음 세대를 위한 위스캠프에 환영합니다! 작성하신 명단은 관리자 대시보드에 실시간으로 안전하게 자동 집계됩니다.</p>
                 </div>
             </div>
@@ -168,7 +168,7 @@
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 pointer-events-none"><i class="fa-solid fa-venus-mars text-xs"></i></span>
                                 <select id="leaderGender" required class="pl-10 pr-8 block w-full rounded-xl border-slate-200 border p-3 text-sm focus:border-blue-500 bg-white outline-none">
-                                    <option value="">성별 선택</option><option value="남">남</option><option value="여">여</option>
+                                    <option value="">성별 선택</option><option value="남">남</option><option value="여">여</option><option value="미정">미정</option>
                                 </select>
                             </div>
                         </div>
@@ -314,10 +314,10 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">연락처 <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">연락처 <span class="text-slate-400 text-xs font-normal ml-1">(선택)</span></label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 pointer-events-none"><i class="fa-solid fa-phone"></i></span>
-                            <input type="tel" id="donatorPhone" required placeholder="예: 010-1234-5678" class="pl-10 block w-full rounded-xl border-slate-200 border p-3 text-sm focus:border-pink-500 outline-none">
+                            <input type="tel" id="donatorPhone" placeholder="안 적으셔도 됩니다" class="pl-10 block w-full rounded-xl border-slate-200 border p-3 text-sm focus:border-pink-500 outline-none">
                         </div>
                     </div>
                     <div class="sm:col-span-2">
@@ -328,7 +328,7 @@
                         </div>
                     </div>
                     <div class="sm:col-span-2">
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">응원 한마디 (선택)</label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">응원 한마디 <span class="text-slate-400 text-xs font-normal ml-1">(선택)</span></label>
                         <textarea id="donateMessage" rows="3" placeholder="다음 세대 아이들을 위한 따뜻한 응원의 메시지를 남겨주세요." class="block w-full rounded-xl border-slate-200 border p-3 text-sm focus:border-pink-500 outline-none resize-none"></textarea>
                     </div>
                 </div>
@@ -392,7 +392,7 @@
                 </div>
             </div>
 
-            <!-- 통계 카드 위젯들 -->
+            <!-- 통계 카드 위젯들 (일반 참석자) -->
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
                 <div class="bg-white rounded-2xl border border-slate-200 p-4 text-center shadow-sm"><span class="block text-[10px] font-semibold text-slate-400">총 신청 교회</span><span id="stat-total-churches" class="text-xl font-black text-slate-800">0개</span></div>
                 <div class="bg-white rounded-2xl border border-slate-200 p-4 text-center shadow-sm"><span class="block text-[10px] font-semibold text-slate-400">총 어린이</span><span id="stat-total-children" class="text-xl font-black text-amber-500">0명</span></div>
@@ -404,12 +404,12 @@
             <!-- 입금 현황 요약 위젯 -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                 <div class="bg-emerald-50 rounded-2xl border border-emerald-200 p-4 shadow-sm flex justify-between px-6 items-center">
-                    <div class="flex space-x-2"><i class="fa-solid fa-check-to-slot text-emerald-600 text-lg"></i><span class="block text-sm font-bold text-emerald-800">입금 완료/부분입금 현황 수</span></div>
-                    <span id="stat-top-paid-churches" class="text-2xl font-black text-emerald-700">0건</span>
+                    <div class="flex space-x-2"><i class="fa-solid fa-check-to-slot text-emerald-600 text-lg"></i><span class="block text-sm font-bold text-emerald-800">참가비 입금된 교회 수</span></div>
+                    <span id="stat-top-paid-churches" class="text-2xl font-black text-emerald-700">0개</span>
                 </div>
-                <div class="bg-blue-50 rounded-2xl border border-blue-200 p-4 shadow-sm flex justify-between px-6 items-center">
-                    <div class="flex space-x-2"><i class="fa-solid fa-won-sign text-blue-600 text-lg"></i><span class="block text-sm font-bold text-blue-800">입금 완료된 총 금액</span></div>
-                    <span id="stat-top-paid-amount" class="text-2xl font-black text-blue-700">0원</span>
+                <div class="bg-pink-50 rounded-2xl border border-pink-200 p-4 shadow-sm flex justify-between px-6 items-center">
+                    <div class="flex space-x-2"><i class="fa-solid fa-hand-holding-heart text-pink-600 text-lg"></i><span class="block text-sm font-bold text-pink-800">단순 후원금 입금된 분</span></div>
+                    <span id="stat-top-paid-donators" class="text-2xl font-black text-pink-700">0분</span>
                 </div>
             </div>
 
@@ -438,29 +438,28 @@
                 </div>
             </div>
 
-            <!-- 명단 상세 관리 아코디언 -->
+            <!-- 1. 명단 상세 관리 아코디언 (캠프 전용) -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mt-6">
                 <div class="p-6 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50">
                     <div>
-                        <h4 class="font-bold text-slate-800 text-base">전체 신청 교회 및 후원 내역 세부 관리</h4>
-                        <p class="text-xs text-slate-500 mt-0.5">이름을 클릭하면 명단이 펼쳐집니다. 하단 버튼으로 수정 및 삭제가 가능합니다.</p>
+                        <h4 class="font-bold text-slate-800 text-base">캠프 참가 신청 교회 세부 관리</h4>
+                        <p class="text-xs text-slate-500 mt-0.5">교회 이름을 클릭하면 명단이 펼쳐집니다. 하단 버튼으로 수정 및 삭제가 가능합니다.</p>
                     </div>
                     <div class="relative w-full md:w-64">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 pointer-events-none"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
-                        <input type="text" id="adminSearchInput" oninput="window.syncDashboard()" placeholder="교회명/후원자 검색..." class="pl-9 w-full rounded-xl border border-slate-200 py-2 px-3 text-xs outline-none focus:border-blue-500 transition-all">
+                        <input type="text" id="adminSearchInput" oninput="window.syncDashboard()" placeholder="이름/교회명 검색..." class="pl-9 w-full rounded-xl border border-slate-200 py-2 px-3 text-xs outline-none focus:border-blue-500 transition-all">
                     </div>
                 </div>
-                <!-- 아코디언 목록 렌더링 공간 -->
-                <div id="admin-organized-list" class="divide-y divide-slate-100 bg-white"></div>
+                <div id="admin-camp-list" class="divide-y divide-slate-100 bg-white"></div>
             </div>
 
-            <!-- 회비 입금 현황 관리 -->
+            <!-- 2. 회비 입금 현황 관리 (캠프 전용) -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col mt-6">
                 <div class="border-b border-slate-100 p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50 rounded-t-2xl">
                     <div>
                         <h4 class="font-bold text-slate-800 flex items-center space-x-2 text-base">
                             <i class="fa-solid fa-won-sign text-emerald-500 bg-emerald-100 p-1.5 rounded-lg"></i>
-                            <span>교회별 회비 및 후원금 입금 관리</span>
+                            <span>교회별 캠프 회비 입금 관리</span>
                         </h4>
                         <p class="text-xs text-slate-500 mt-1">학생 3만 원, 교사 10만 원 기준. <b>직접 입력하거나 [완납처리] 버튼을 누르세요.</b></p>
                     </div>
@@ -468,23 +467,22 @@
                         <span class="text-xs font-bold text-slate-500 shrink-0">필터:</span>
                         <select id="feeFilterSelect" onchange="window.syncDashboard()" class="w-full rounded-xl border border-slate-200 py-2 px-3 text-xs outline-none bg-white font-bold text-slate-700 shadow-sm cursor-pointer pr-8">
                             <option value="all">전체 목록 보기</option>
-                            <option value="paid">✅ 완납된 내역만</option>
+                            <option value="paid">✅ 완납 내역만</option>
                             <option value="partial">⚠️ 부분입금 내역만</option>
                             <option value="unpaid">⏳ 미납 전체 보기</option>
                         </select>
                     </div>
                 </div>
-                <div class="grid grid-cols-3 divide-x divide-slate-100 border-b border-slate-100 bg-white">
-                    <div class="p-4 text-center"><span class="block text-xs font-bold text-slate-400 mb-1">총 예상 캠프 회비</span><span id="stat-total-expected-fee" class="text-xl font-black text-slate-700">0원</span></div>
-                    <div class="p-4 text-center bg-pink-50/30"><span class="block text-xs font-bold text-pink-600 mb-1">총 약정 후원금</span><span id="stat-total-donation" class="text-xl font-black text-pink-600">0원</span></div>
-                    <div class="p-4 text-center bg-emerald-50/20"><span class="block text-xs font-bold text-emerald-600 mb-1">전체 입금 완료 총액</span><span id="stat-total-collected-fee" class="text-xl font-black text-emerald-600">0원</span></div>
+                <div class="grid grid-cols-2 divide-x divide-slate-100 border-b border-slate-100 bg-white">
+                    <div class="p-4 text-center"><span class="block text-xs font-bold text-slate-400 mb-1">캠프 총 청구액</span><span id="stat-total-expected-fee" class="text-xl font-black text-slate-700">0원</span></div>
+                    <div class="p-4 text-center bg-emerald-50/20"><span class="block text-xs font-bold text-emerald-600 mb-1">현재 캠프비 입금 완료액</span><span id="stat-total-collected-fee" class="text-xl font-black text-emerald-600">0원</span></div>
                 </div>
                 <div class="overflow-x-auto max-h-[350px] overflow-y-auto">
                     <table class="w-full text-left text-xs border-collapse whitespace-nowrap">
                         <thead>
                             <tr class="bg-slate-50 text-slate-500 font-bold border-b border-slate-100">
-                                <th class="py-2 px-2 w-[18%]">교회명 / 단체명</th>
-                                <th class="py-2 px-2 text-right">총 청구/약정액</th>
+                                <th class="py-2 px-2 w-[18%]">교회명</th>
+                                <th class="py-2 px-2 text-right">총 청구액</th>
                                 <th class="py-2 px-2 text-center">입금 관리</th>
                                 <th class="py-2 px-2 text-right">미납 잔액</th>
                                 <th class="py-2 px-2 text-center">상태</th>
@@ -495,10 +493,52 @@
                 </div>
             </div>
 
+            <!-- 3. 명단 상세 관리 아코디언 (후원 전용 분리) -->
+            <div class="bg-white rounded-2xl border border-pink-200 shadow-sm overflow-hidden mt-10">
+                <div class="p-6 border-b border-pink-100 flex flex-col md:flex-row justify-between items-center gap-4 bg-pink-50">
+                    <div>
+                        <h4 class="font-bold text-pink-800 text-base">단순 후원 명단 세부 관리</h4>
+                        <p class="text-xs text-pink-600 mt-0.5">후원자 이름을 클릭하면 세부 메시지를 볼 수 있습니다.</p>
+                    </div>
+                </div>
+                <div id="admin-donation-list" class="divide-y divide-pink-100 bg-white"></div>
+            </div>
+
+            <!-- 4. 후원금 입금 현황 (후원 전용 분리) -->
+            <div class="bg-white rounded-2xl border border-pink-200 shadow-sm flex flex-col mt-6">
+                <div class="border-b border-pink-100 p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-pink-50 rounded-t-2xl">
+                    <div>
+                        <h4 class="font-bold text-pink-800 flex items-center space-x-2 text-base">
+                            <i class="fa-solid fa-hand-holding-heart text-pink-500 bg-pink-100 p-1.5 rounded-lg"></i>
+                            <span>단순 후원금 입금 현황 관리</span>
+                        </h4>
+                        <p class="text-xs text-pink-600 mt-1">작성해주신 약정액과 실제 입금 내역을 대조합니다.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 divide-x divide-pink-100 border-b border-pink-100 bg-white">
+                    <div class="p-4 text-center"><span class="block text-xs font-bold text-pink-400 mb-1">총 약정 후원금</span><span id="stat-total-donation" class="text-xl font-black text-pink-700">0원</span></div>
+                    <div class="p-4 text-center bg-pink-50/50"><span class="block text-xs font-bold text-pink-600 mb-1">입금 완료된 후원 총액</span><span id="stat-total-collected-donation" class="text-xl font-black text-pink-600">0원</span></div>
+                </div>
+                <div class="overflow-x-auto max-h-[350px] overflow-y-auto">
+                    <table class="w-full text-left text-xs border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr class="bg-pink-50/30 text-pink-500 font-bold border-b border-pink-100">
+                                <th class="py-2 px-2 w-[18%]">성함/단체명</th>
+                                <th class="py-2 px-2 text-right">약정액</th>
+                                <th class="py-2 px-2 text-center">입금 관리</th>
+                                <th class="py-2 px-2 text-right">미납 잔액</th>
+                                <th class="py-2 px-2 text-center">상태</th>
+                            </tr>
+                        </thead>
+                        <tbody id="donation-fee-table-body" class="divide-y divide-pink-100"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- 남녀 성비 요약 -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mt-6">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mt-10">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-                    <!-- 남녀 성비 (어린이, 청소년, 인솔자 3단 분리) -->
+                    <!-- 남녀 성비 3분할 -->
                     <div class="md:pr-8 pb-6 md:pb-0">
                         <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-4"><i class="fa-solid fa-venus-mars text-rose-400 mr-1.5"></i>그룹별 남녀 성비 상세</h4>
                         <div id="gender-ratio-container" class="space-y-4 px-2"></div>
@@ -526,9 +566,18 @@
             </div>
         </section>
 
+        <!-- 등록 완료 모달 -->
+        <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
+            <div class="bg-white rounded-3xl max-w-sm w-full p-8 mx-4 shadow-2xl text-center">
+                <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 animate-bounce"><i class="fa-solid fa-circle-check"></i></div>
+                <h3 class="text-2xl font-black text-slate-900 mb-2">접수 완료!</h3>
+                <p class="text-sm text-slate-500 mb-6">성공적으로 위스캠프 서버에 안전하게 등록되었습니다.</p>
+                <button onclick="window.closeSuccessModal()" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all">확인</button>
+            </div>
+        </div>
+
     </main>
 
-    <!-- 스크립트 기능 시작 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -566,7 +615,7 @@
                     }
                 }, (error) => {
                     console.error("Firebase read error", error);
-                    window.showToast('error', '데이터 수신 실패. 데이터베이스 규칙을 확인하세요.');
+                    window.showToast('error', '데이터 수신 실패. 데이터베이스 권한을 확인하세요.');
                 });
 
                 onSnapshot(doc(db, 'settings', 'general'), (docSnap) => {
@@ -606,7 +655,6 @@
             if (e.key === 'Enter') window.verifyAdminPassword();
         });
 
-        // 뷰 전환 로직 (신청 / 후원 / 관리자 3개로 분리)
         window.switchView = function(view) {
             document.getElementById('view-register').classList.add('hidden');
             document.getElementById('view-donate').classList.add('hidden');
@@ -893,37 +941,36 @@
 
         window.handleFormSubmit = async function(e) {
             e.preventDefault();
-            const payload = {
-                type: 'camp', // 일반 캠프 신청
-                churchName: document.getElementById('churchName').value,
-                churchAddress: document.getElementById('churchAddress').value,
-                leaderName: document.getElementById('leaderName').value,
-                leaderGender: document.getElementById('leaderGender').value,
-                leaderTitle: document.getElementById('leaderTitle').value,
-                leaderPhone: document.getElementById('leaderPhone').value,
-                donationAmount: 0, // 기존 호환성을 위해 0으로 고정
-                students: [], leaders: [], childrenCount: 0, studentCount: 0
-            };
-
-            document.getElementById('student-tbody').querySelectorAll('tr').forEach(tr => {
-                const type = tr.querySelector('.sync-type').value;
-                if(type === '어린이') payload.childrenCount++; else payload.studentCount++;
-                payload.students.push({
-                    name: tr.querySelector('.sync-name').value, gender: tr.querySelector('.sync-gender').value,
-                    type: type, grade: tr.querySelector('.sync-grade').value, notes: tr.querySelector('.sync-notes').value
-                });
-            });
-
-            document.getElementById('leader-tbody').querySelectorAll('tr').forEach(tr => {
-                payload.leaders.push({
-                    name: tr.querySelector('.sync-name').value, gender: tr.querySelector('.sync-gender').value,
-                    title: tr.querySelector('.sync-title').value, isMain: tr.querySelector('.sync-main').checked,
-                    notes: tr.querySelector('.sync-notes').value
-                });
-            });
-            payload.leaderCount = payload.leaders.length;
-
             try {
+                const payload = {
+                    type: 'camp', // 일반 캠프 신청
+                    churchName: document.getElementById('churchName').value,
+                    churchAddress: document.getElementById('churchAddress').value,
+                    leaderName: document.getElementById('leaderName').value,
+                    leaderGender: document.getElementById('leaderGender').value,
+                    leaderTitle: document.getElementById('leaderTitle').value,
+                    leaderPhone: document.getElementById('leaderPhone').value,
+                    students: [], leaders: [], childrenCount: 0, studentCount: 0
+                };
+
+                document.getElementById('student-tbody').querySelectorAll('tr').forEach(tr => {
+                    const type = tr.querySelector('.sync-type').value;
+                    if(type === '어린이') payload.childrenCount++; else payload.studentCount++;
+                    payload.students.push({
+                        name: tr.querySelector('.sync-name').value, gender: tr.querySelector('.sync-gender').value,
+                        type: type, grade: tr.querySelector('.sync-grade').value, notes: tr.querySelector('.sync-notes').value
+                    });
+                });
+
+                document.getElementById('leader-tbody').querySelectorAll('tr').forEach(tr => {
+                    payload.leaders.push({
+                        name: tr.querySelector('.sync-name').value, gender: tr.querySelector('.sync-gender').value,
+                        title: tr.querySelector('.sync-title').value, isMain: tr.querySelector('.sync-main').checked,
+                        notes: tr.querySelector('.sync-notes').value
+                    });
+                });
+                payload.leaderCount = payload.leaders.length;
+
                 if (window.editingId) {
                     await updateDoc(doc(db, 'registrations', window.editingId), payload);
                     window.showToast('success', '성공적으로 내용이 갱신되었습니다!');
@@ -938,20 +985,33 @@
             } catch(err) { window.showToast('error', '제출 실패! 파이어베이스 연결을 확인하세요.'); }
         };
 
+        // 완벽하게 다듬어진 후원금 제출 함수 (빈 값이나 undefined를 안전하게 처리)
         window.handleDonateSubmit = async function(e) {
             e.preventDefault();
-            const payload = {
-                type: 'donation', // 단순 후원
-                churchName: document.getElementById('donatorName').value + ' (단순후원)', // 통계 대시보드 호환용
-                donatorName: document.getElementById('donatorName').value,
-                leaderPhone: document.getElementById('donatorPhone').value,
-                donationAmount: parseInt(document.getElementById('donateAmount').value) || 0,
-                notes: document.getElementById('donateMessage').value,
-                churchAddress: '', leaderName: '', leaderGender: '', leaderTitle: '',
-                students: [], leaders: [], childrenCount: 0, studentCount: 0, leaderCount: 0
-            };
-
             try {
+                // 각 요소의 값이 비어있어도 에러가 나지 않도록 방어 코드 작성
+                const nameEl = document.getElementById('donatorName');
+                const phoneEl = document.getElementById('donatorPhone');
+                const amountEl = document.getElementById('donateAmount');
+                const messageEl = document.getElementById('donateMessage');
+
+                const donatorNameStr = nameEl && nameEl.value ? nameEl.value.trim() : '';
+                const donatorPhoneStr = phoneEl && phoneEl.value ? phoneEl.value.trim() : '';
+                const donateAmountNum = amountEl && amountEl.value ? parseInt(amountEl.value) || 0 : 0;
+                const donateMsgStr = messageEl && messageEl.value ? messageEl.value.trim() : '';
+
+                const payload = {
+                    type: 'donation', // 단순 후원
+                    churchName: donatorNameStr + ' (단순후원)', // 통계 표기용 범용 데이터
+                    donatorName: donatorNameStr,
+                    leaderPhone: donatorPhoneStr,
+                    donationAmount: donateAmountNum,
+                    notes: donateMsgStr,
+                    // 파이어베이스에 undefined 에러가 발생하지 않도록 빈 값 세팅
+                    churchAddress: '', leaderName: '', leaderGender: '', leaderTitle: '',
+                    students: [], leaders: [], childrenCount: 0, studentCount: 0, leaderCount: 0
+                };
+
                 if (window.editingId) {
                     await updateDoc(doc(db, 'registrations', window.editingId), payload);
                     window.showToast('success', '후원 약정서가 갱신되었습니다!');
@@ -963,7 +1023,10 @@
                     window.cancelEdit();
                     document.getElementById('success-modal').classList.remove('hidden');
                 }
-            } catch(err) { window.showToast('error', '제출 실패! 서버 연결을 확인하세요.'); }
+            } catch(err) { 
+                console.error("Donation submit error:", err);
+                window.showToast('error', '제출 실패! 서버 연결을 확인하세요.'); 
+            }
         }
 
         window.closeSuccessModal = function() { document.getElementById('success-modal').classList.add('hidden'); };
@@ -1005,7 +1068,7 @@
         window.copyFixedLink = function() {
             const input = document.getElementById('share-link-input');
             input.select(); input.setSelectionRange(0, 99999);
-            try { document.execCommand('copy'); window.showToast('success', '공식 신청 링크가 안전하게 복사되었습니다!'); } 
+            try { document.execCommand('copy'); window.showToast('success', '공식 신청 링크가 복사되었습니다!'); } 
             catch(err) { window.showToast('error', '복사 실패'); }
         };
 
@@ -1017,46 +1080,54 @@
 
             let elemCount=0, midCount=0, highCount=0, otherCount=0;
             
-            let totalExpectedFee = 0; // 캠프 참가비 총액
-            let totalDonationsAmount = 0; // 순수 후원 약정 총액
-            let totalCollectedFee = 0; // 납부 완료된 총 입금액
+            let totalExpectedCampFee = 0; // 캠프 참가비 청구 총액
+            let totalCollectedCampFee = 0; // 캠프 참가비 실제 입금 총액
+            let totalPledgedDonation = 0; // 단순 후원 약정 총액
+            let totalCollectedDonation = 0; // 단순 후원금 실제 입금 총액
             
             let totalCampChurches = 0;
-            let totalPaidChurches = 0;
+            let totalPaidChurches = 0; // 캠프 입금 건수
+            let totalPaidDonators = 0; // 후원 입금 건수
             
             const searchKeyword = (document.getElementById('adminSearchInput') ? document.getElementById('adminSearchInput').value.toLowerCase() : "");
             const feeFilter = document.getElementById('feeFilterSelect') ? document.getElementById('feeFilterSelect').value : 'all';
 
             const hBarContainer = document.getElementById('church-horizontal-bar-container'); hBarContainer.innerHTML = '';
             const mlBody = document.getElementById('main-leader-table-body'); mlBody.innerHTML = '';
-            const orgList = document.getElementById('admin-organized-list'); orgList.innerHTML = '';
-            const feeBody = document.getElementById('fee-table-body'); feeBody.innerHTML = '';
+            
+            // 캠프 표/리스트
+            const campOrgList = document.getElementById('admin-camp-list'); if(campOrgList) campOrgList.innerHTML = '';
+            const campFeeBody = document.getElementById('fee-table-body'); if(campFeeBody) campFeeBody.innerHTML = '';
+            
+            // 후원 표/리스트
+            const donOrgList = document.getElementById('admin-donation-list'); if(donOrgList) donOrgList.innerHTML = '';
+            const donFeeBody = document.getElementById('donation-fee-table-body'); if(donFeeBody) donFeeBody.innerHTML = '';
 
             registrations.forEach(r => {
                 const isDonation = r.type === 'donation';
                 
                 let expectedFee = 0;
-                let feeAmt = 0; // 순수 회비
-                let donationAmt = 0; // 후원금
                 const stuTotal = (r.childrenCount||0) + (r.studentCount||0);
 
                 if (isDonation) {
-                    donationAmt = parseInt(r.donationAmount) || 0;
-                    expectedFee = donationAmt;
+                    expectedFee = parseInt(r.donationAmount) || 0;
                 } else {
                     tc += (r.childrenCount||0); ts += (r.studentCount||0); tl += (r.leaderCount||0);
-                    feeAmt = (stuTotal * 30000) + ((r.leaderCount||0) * 100000);
-                    donationAmt = parseInt(r.donationAmount) || 0; // 과거 자발적 후원금 호환용
-                    expectedFee = feeAmt + donationAmt;
+                    expectedFee = (stuTotal * 30000) + ((r.leaderCount||0) * 100000);
                     totalCampChurches++;
                 }
 
                 const paidAmt = r.paidAmount || 0;
                 const remaining = expectedFee - paidAmt;
                 
-                totalExpectedFee += feeAmt;
-                totalDonationsAmount += donationAmt;
-                totalCollectedFee += paidAmt;
+                // 분리하여 집계 합산
+                if (isDonation) {
+                    totalPledgedDonation += expectedFee;
+                    totalCollectedDonation += paidAmt;
+                } else {
+                    totalExpectedCampFee += expectedFee;
+                    totalCollectedCampFee += paidAmt;
+                }
                 
                 let paymentStatusBadge = '';
                 let isFullyPaid = false;
@@ -1065,11 +1136,11 @@
                 if (paidAmt >= expectedFee && expectedFee > 0) {
                     paymentStatusBadge = '<span class="px-2 py-1 bg-blue-100 text-blue-700 text-[10px] rounded font-bold border border-blue-200">✅ 완납</span>';
                     isFullyPaid = true;
-                    totalPaidChurches++;
+                    if (isDonation) totalPaidDonators++; else totalPaidChurches++;
                 } else if (paidAmt > 0) {
                     paymentStatusBadge = '<span class="px-2 py-1 bg-amber-100 text-amber-700 text-[10px] rounded font-bold border border-amber-200">⚠️ 부분납</span>';
                     isPartial = true;
-                    totalPaidChurches++;
+                    if (isDonation) totalPaidDonators++; else totalPaidChurches++;
                 } else {
                     paymentStatusBadge = '<span class="px-2 py-1 bg-slate-100 text-slate-500 text-[10px] rounded font-bold border border-slate-200">⏳ 미납</span>';
                 }
@@ -1090,7 +1161,7 @@
                     });
                 }
 
-                // 회비/후원금 테이블 렌더링
+                // 회비/후원금 테이블 렌더링 (필터 적용)
                 let showFeeRow = true;
                 if (feeFilter === 'paid' && !isFullyPaid) showFeeRow = false;
                 if (feeFilter === 'partial' && !isPartial) showFeeRow = false;
@@ -1104,35 +1175,58 @@
                     let remainingText = remaining > 0 ? remaining.toLocaleString() + "원" : "0원";
                     let remainingClass = remaining > 0 ? "font-bold text-rose-500" : "font-black text-blue-600";
 
-                    let churchDisplayName = isDonation ? `<span class="text-pink-600 font-black mr-1">[후원]</span>${r.donatorName}` : r.churchName;
-                    let memberDesc = isDonation ? `<div class="text-[10px] text-pink-400 font-normal mt-0.5">${r.leaderPhone}</div>` : `<div class="text-[10px] text-slate-400 font-normal mt-0.5">(학생 ${stuTotal}명 + 교사 ${r.leaderCount||0}명)</div>`;
-                    let feeDesc = isDonation 
-                        ? `<div class="font-bold text-pink-600 text-[13px]">${expectedFee.toLocaleString()}원</div><div class="text-[10px] text-pink-400 font-medium">순수 후원금</div>` 
-                        : `<div class="font-bold text-blue-600 text-[13px]">${expectedFee.toLocaleString()}원</div><div class="text-[10px] text-slate-400 font-medium">캠프 회비</div>`;
-
-                    feeBody.innerHTML += `
-                        <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="py-2 px-2 font-bold text-slate-800">${churchDisplayName}${memberDesc}</td>
-                            <td class="py-2 px-2 text-right">${feeDesc}</td>
-                            <td class="py-2 px-2 text-center">
-                                <div class="flex items-center justify-center space-x-1">
-                                    <input type="number" id="fee-input-${r.id}" value="0" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') this.value='0';" class="w-16 border border-slate-300 rounded px-1.5 py-1 text-[11px] outline-none focus:border-blue-500 text-right font-bold text-slate-700 bg-white" placeholder="총액">
-                                    <button onclick="window.updatePaymentAmount('${r.id}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold border border-blue-200 transition-colors shrink-0">저장</button>
-                                    ${fullPayBtnHTML}
-                                    <div class="ml-1 pl-1.5 border-l border-slate-200 flex flex-col text-left justify-center min-w-[65px]">
-                                        <span class="text-[8px] text-slate-400 font-bold mb-0.5">누적입금</span>
-                                        <span class="text-[11px] font-black text-emerald-600">${paidAmt.toLocaleString()}원</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="py-2 px-2 text-right text-[13px] ${remainingClass}">${remainingText}</td>
-                            <td class="py-2 px-2 text-center">${paymentStatusBadge}</td>
-                        </tr>
-                    `;
+                    if (isDonation) {
+                        if(donFeeBody) {
+                            donFeeBody.innerHTML += `
+                                <tr class="hover:bg-pink-50/30 transition-colors">
+                                    <td class="py-2 px-2 font-bold text-pink-800">${r.donatorName}</td>
+                                    <td class="py-2 px-2 text-right font-bold text-pink-600 text-[13px]">${expectedFee.toLocaleString()}원</td>
+                                    <td class="py-2 px-2 text-center">
+                                        <div class="flex items-center justify-center space-x-1">
+                                            <input type="number" id="fee-input-${r.id}" value="0" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') this.value='0';" class="w-16 border border-pink-200 rounded px-1.5 py-1 text-[11px] outline-none focus:border-pink-500 text-right font-bold text-slate-700 bg-white" placeholder="총액">
+                                            <button onclick="window.updatePaymentAmount('${r.id}')" class="bg-pink-50 hover:bg-pink-100 text-pink-700 px-2 py-1 rounded text-[10px] font-bold border border-pink-200 transition-colors shrink-0">저장</button>
+                                            ${fullPayBtnHTML}
+                                            <div class="ml-1 pl-1.5 border-l border-pink-200 flex flex-col text-left justify-center min-w-[65px]">
+                                                <span class="text-[8px] text-pink-400 font-bold mb-0.5">누적입금</span>
+                                                <span class="text-[11px] font-black text-emerald-600">${paidAmt.toLocaleString()}원</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-2 px-2 text-right text-[13px] ${remainingClass}">${remainingText}</td>
+                                    <td class="py-2 px-2 text-center">${paymentStatusBadge}</td>
+                                </tr>
+                            `;
+                        }
+                    } else {
+                        if(campFeeBody) {
+                            campFeeBody.innerHTML += `
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="py-2 px-2 font-bold text-slate-800">
+                                        ${r.churchName}
+                                        <div class="text-[10px] text-slate-400 font-normal mt-0.5">(학생 ${stuTotal}명 + 교사 ${r.leaderCount||0}명)</div>
+                                    </td>
+                                    <td class="py-2 px-2 text-right font-bold text-blue-600 text-[13px]">${expectedFee.toLocaleString()}원</td>
+                                    <td class="py-2 px-2 text-center">
+                                        <div class="flex items-center justify-center space-x-1">
+                                            <input type="number" id="fee-input-${r.id}" value="0" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') this.value='0';" class="w-16 border border-slate-300 rounded px-1.5 py-1 text-[11px] outline-none focus:border-blue-500 text-right font-bold text-slate-700 bg-white" placeholder="총액">
+                                            <button onclick="window.updatePaymentAmount('${r.id}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold border border-blue-200 transition-colors shrink-0">저장</button>
+                                            ${fullPayBtnHTML}
+                                            <div class="ml-1 pl-1.5 border-l border-slate-200 flex flex-col text-left justify-center min-w-[65px]">
+                                                <span class="text-[8px] text-slate-400 font-bold mb-0.5">누적입금</span>
+                                                <span class="text-[11px] font-black text-emerald-600">${paidAmt.toLocaleString()}원</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-2 px-2 text-right text-[13px] ${remainingClass}">${remainingText}</td>
+                                    <td class="py-2 px-2 text-center">${paymentStatusBadge}</td>
+                                </tr>
+                            `;
+                        }
+                    }
                 }
 
                 // 가로 차트 & 메인 인솔자 표 (캠프 신청만 렌더링)
-                if (!isDonation) {
+                if (!isDonation && hBarContainer && mlBody) {
                     const total = (r.childrenCount||0) + (r.studentCount||0) + (r.leaderCount||0);
                     hBarContainer.innerHTML += `
                         <div class="mb-3">
@@ -1150,36 +1244,36 @@
                     mlBody.innerHTML += `<tr class="hover:bg-slate-50"><td class="py-2 px-3 font-bold text-slate-700">${r.churchName}</td><td class="py-2 px-3">${leaderDisplay}</td><td class="py-2 px-3 text-slate-500">${r.leaderPhone}</td></tr>`;
                 }
 
-                // 아코디언 검색 및 렌더링 (단순 후원과 일반 신청 분리 표시)
-                const searchStr = isDonation ? r.donatorName : r.churchName;
+                // 아코디언 검색 및 렌더링 (단순 후원과 일반 신청 철저히 분리)
+                const searchStr = isDonation ? (r.donatorName || '') : (r.churchName || '');
                 if (searchKeyword && !searchStr.toLowerCase().includes(searchKeyword)) return;
 
-                if (isDonation) {
-                    orgList.innerHTML += `
-                    <div class="border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
+                if (isDonation && donOrgList) {
+                    donOrgList.innerHTML += `
+                    <div class="border-b border-pink-100 last:border-0 hover:bg-pink-50/30 transition-colors">
                         <div class="p-4 flex flex-col sm:flex-row sm:items-center justify-between cursor-pointer group" onclick="window.toggleAccordion('${r.id}')">
                             <div class="flex items-center mb-2 sm:mb-0">
-                                <h5 class="font-bold text-pink-700 text-sm mr-2"><span class="bg-pink-100 text-pink-600 px-1.5 py-0.5 rounded text-[10px] mr-1.5 border border-pink-200">단순후원</span>${r.donatorName}</h5>
-                                <span class="text-[10px] text-slate-400 border-l border-slate-200 pl-2"><i class="fa-solid fa-phone mr-1"></i>${r.leaderPhone}</span>
+                                <h5 class="font-bold text-pink-700 text-sm mr-2">${r.donatorName}</h5>
+                                ${r.leaderPhone ? `<span class="text-[10px] text-pink-400 border-l border-pink-200 pl-2"><i class="fa-solid fa-phone mr-1"></i>${r.leaderPhone}</span>` : ''}
                             </div>
                             <div class="flex items-center space-x-3">
-                                <span class="text-xs font-black text-pink-600">${r.donationAmount.toLocaleString()}원</span>
-                                <div class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors shrink-0">
+                                <span class="text-xs font-black text-pink-600">${expectedFee.toLocaleString()}원</span>
+                                <div class="w-7 h-7 rounded-full bg-pink-50 flex items-center justify-center text-pink-400 group-hover:bg-pink-100 group-hover:text-pink-600 transition-colors shrink-0">
                                     <i id="icon-${r.id}" class="fa-solid fa-chevron-down text-[11px] transition-transform duration-300"></i>
                                 </div>
                             </div>
                         </div>
                         <div id="content-${r.id}" class="hidden">
-                            <div class="px-6 pb-6 bg-slate-50/50 border-t border-slate-100 pt-4 shadow-inner">
-                                <div class="bg-white p-4 rounded-xl border border-slate-200 text-sm text-slate-600 mb-4"><b>응원 메시지:</b> ${r.notes || '없음'}</div>
-                                <div class="flex justify-end space-x-3 border-t border-slate-200 pt-4">
+                            <div class="px-6 pb-6 bg-pink-50/30 border-t border-pink-100 pt-4 shadow-inner">
+                                <div class="bg-white p-4 rounded-xl border border-pink-100 text-sm text-slate-600 mb-4"><b>응원 메시지:</b> ${r.notes || '없음'}</div>
+                                <div class="flex justify-end space-x-3 border-t border-pink-100 pt-4">
                                     <button type="button" onclick="event.stopPropagation(); window.editRegistration('${r.id}')" class="px-5 py-2.5 bg-white hover:bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center"><i class="fa-solid fa-pen-to-square mr-1.5"></i> 후원 수정하기</button>
                                     <button type="button" onclick="event.stopPropagation(); window.deleteRegistration('${r.id}')" class="px-5 py-2.5 bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center"><i class="fa-solid fa-trash-can mr-1.5"></i> 영구 삭제하기</button>
                                 </div>
                             </div>
                         </div>
                     </div>`;
-                } else {
+                } else if (!isDonation && campOrgList) {
                     let studentsHtml = '';
                     if (r.students && r.students.length > 0) {
                         studentsHtml = `<div class="mb-4"><h6 class="text-xs font-bold text-blue-700 mb-2 bg-blue-50 py-1.5 px-3 rounded-lg inline-block shadow-sm">어린이 및 청소년 명단</h6><ul class="text-xs space-y-2 pl-2 mt-1">`;
@@ -1200,7 +1294,7 @@
                     }
 
                     const total = (r.childrenCount||0) + (r.studentCount||0) + (r.leaderCount||0);
-                    orgList.innerHTML += `
+                    campOrgList.innerHTML += `
                     <div class="border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
                         <div class="p-4 flex flex-col md:flex-row md:items-center justify-between cursor-pointer group" onclick="window.toggleAccordion('${r.id}')">
                             <div class="flex items-center mb-2 md:mb-0">
@@ -1227,19 +1321,22 @@
                 }
             });
 
-            // 숫자 업데이트 (일반 캠프만 카운트)
+            // 숫자 업데이트 (일반 캠프)
             document.getElementById('stat-total-churches').innerText = totalCampChurches + "개";
             document.getElementById('stat-total-children').innerText = tc + "명";
             document.getElementById('stat-total-students').innerText = ts + "명";
             document.getElementById('stat-total-leaders').innerText = tl + "명";
             document.getElementById('stat-grand-total').innerText = (tc+ts+tl) + "명";
 
-            // 회비 및 입금액 업데이트 (분리)
-            document.getElementById('stat-total-expected-fee').innerText = totalExpectedFee.toLocaleString() + "원";
-            document.getElementById('stat-total-donation').innerText = totalDonationsAmount.toLocaleString() + "원";
-            document.getElementById('stat-total-collected-fee').innerText = totalCollectedFee.toLocaleString() + "원";
-            document.getElementById('stat-top-paid-churches').innerText = totalPaidChurches + "건";
-            document.getElementById('stat-top-paid-amount').innerText = totalCollectedFee.toLocaleString() + "원";
+            // 회비 및 입금액 업데이트 (캠프 vs 후원금 100% 분리)
+            const elExpCamp = document.getElementById('stat-total-expected-fee'); if(elExpCamp) elExpCamp.innerText = totalExpectedCampFee.toLocaleString() + "원";
+            const elColCamp = document.getElementById('stat-total-collected-fee'); if(elColCamp) elColCamp.innerText = totalCollectedCampFee.toLocaleString() + "원";
+            
+            const elExpDon = document.getElementById('stat-total-donation'); if(elExpDon) elExpDon.innerText = totalPledgedDonation.toLocaleString() + "원";
+            const elColDon = document.getElementById('stat-total-collected-donation'); if(elColDon) elColDon.innerText = totalCollectedDonation.toLocaleString() + "원";
+            
+            const elPaidChurch = document.getElementById('stat-top-paid-churches'); if(elPaidChurch) elPaidChurch.innerText = totalPaidChurches + "개";
+            const elPaidDon = document.getElementById('stat-top-paid-donators'); if(elPaidDon) elPaidDon.innerText = totalPaidDonators + "분";
 
             // 성비 바 렌더링 함수
             const childTotal = childMale + childFemale + childUnknown;
@@ -1277,10 +1374,13 @@
                     </div>`;
             }
 
-            document.getElementById('gender-ratio-container').innerHTML = 
-                renderGenderBar('👦 어린이', childMale, childFemale, childUnknown, childTotal, childMalePct, childFemalePct, childUnknownPct) +
-                renderGenderBar('🧑‍🎓 청소년', youthMale, youthFemale, youthUnknown, youthTotal, youthMalePct, youthFemalePct, youthUnknownPct) +
-                renderGenderBar('👨‍🏫 인솔자', leaderMale, leaderFemale, leaderUnknown, leaderTotal, leaderMalePct, leaderFemalePct, leaderUnknownPct);
+            const genderRatioContainer = document.getElementById('gender-ratio-container');
+            if(genderRatioContainer) {
+                genderRatioContainer.innerHTML = 
+                    renderGenderBar('👦 어린이', childMale, childFemale, childUnknown, childTotal, childMalePct, childFemalePct, childUnknownPct) +
+                    renderGenderBar('🧑‍🎓 청소년', youthMale, youthFemale, youthUnknown, youthTotal, youthMalePct, youthFemalePct, youthUnknownPct) +
+                    renderGenderBar('👨‍🏫 인솔자', leaderMale, leaderFemale, leaderUnknown, leaderTotal, leaderMalePct, leaderFemalePct, leaderUnknownPct);
+            }
 
             // 연령별(초/중/고) 바
             const totalStudents = elemCount + midCount + highCount + otherCount;
@@ -1288,58 +1388,58 @@
             let midPct = totalStudents === 0 ? 0 : Math.round((midCount / totalStudents) * 100);
             let highPct = totalStudents === 0 ? 0 : Math.round((highCount / totalStudents) * 100);
             
-            document.getElementById('age-ratio-container').innerHTML = `
-                <div class="flex justify-between items-end mb-1.5 text-xs">
-                    <div class="font-bold text-amber-600"><span class="w-2.5 h-2.5 inline-block bg-amber-400 rounded-full mr-1 shadow-sm"></span>초등 ${elemCount}명</div>
-                    <div class="font-bold text-blue-600"><span class="w-2.5 h-2.5 inline-block bg-blue-500 rounded-full mr-1 shadow-sm"></span>중등 ${midCount}명</div>
-                    <div class="font-bold text-purple-600"><span class="w-2.5 h-2.5 inline-block bg-purple-500 rounded-full mr-1 shadow-sm"></span>고등 ${highCount}명</div>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-4 flex overflow-hidden shadow-inner border border-slate-200">
-                    <div class="bg-amber-400 h-4 transition-all duration-1000 ease-out" style="width: ${elemPct}%"></div>
-                    <div class="bg-blue-500 h-4 transition-all duration-1000 ease-out" style="width: ${midPct}%"></div>
-                    <div class="bg-purple-500 h-4 transition-all duration-1000 ease-out" style="width: ${highPct}%"></div>
-                </div>
-                <div class="text-[10px] text-slate-400 mt-1.5 text-right font-medium">※ 전체 학생 ${totalStudents}명 기준 (어린이/청소년)</div>
-            `;
+            const ageRatioContainer = document.getElementById('age-ratio-container');
+            if(ageRatioContainer) {
+                ageRatioContainer.innerHTML = `
+                    <div class="flex justify-between items-end mb-1.5 text-xs">
+                        <div class="font-bold text-amber-600"><span class="w-2.5 h-2.5 inline-block bg-amber-400 rounded-full mr-1 shadow-sm"></span>초등 ${elemCount}명</div>
+                        <div class="font-bold text-blue-600"><span class="w-2.5 h-2.5 inline-block bg-blue-500 rounded-full mr-1 shadow-sm"></span>중등 ${midCount}명</div>
+                        <div class="font-bold text-purple-600"><span class="w-2.5 h-2.5 inline-block bg-purple-500 rounded-full mr-1 shadow-sm"></span>고등 ${highCount}명</div>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-4 flex overflow-hidden shadow-inner border border-slate-200">
+                        <div class="bg-amber-400 h-4 transition-all duration-1000 ease-out" style="width: ${elemPct}%"></div>
+                        <div class="bg-blue-500 h-4 transition-all duration-1000 ease-out" style="width: ${midPct}%"></div>
+                        <div class="bg-purple-500 h-4 transition-all duration-1000 ease-out" style="width: ${highPct}%"></div>
+                    </div>
+                    <div class="text-[10px] text-slate-400 mt-1.5 text-right font-medium">※ 전체 학생 ${totalStudents}명 기준 (어린이/청소년)</div>
+                `;
+            }
         };
 
         // 모바일 뒤로가기 및 새로고침 방지 (해시 라우팅 기반 완벽 제어)
-        window.isNavigatingAway = false;
+        let isNavigatingAway = false;
         
-        // 브라우저가 첫 로드 시 해시가 없으면 기본 'register' 상태로 초기화
-        if (!location.hash) {
-            history.replaceState(null, null, '#register');
-        }
+        const initHistoryStack = function() {
+            if (!window.historyPushed) {
+                history.pushState(null, null, location.href);
+                window.historyPushed = true;
+            }
+        };
+        document.body.addEventListener('touchstart', initHistoryStack, { once: true });
+        document.body.addEventListener('click', initHistoryStack, { once: true });
 
         window.addEventListener('popstate', function(event) {
-            if (window.isNavigatingAway) return;
+            if (isNavigatingAway) return;
 
             const viewAdmin = document.getElementById('view-admin');
             const viewDonate = document.getElementById('view-donate');
             
-            // 1. 관리자 모드에서 뒤로가기 누른 경우 -> 튕기지 않고 신청화면으로
             if (viewAdmin && !viewAdmin.classList.contains('hidden')) {
                 window.switchView('register');
-                history.pushState(null, null, '#register');
-            }
-            // 2. 후원 모드에서 뒤로가기 누른 경우 -> 튕기지 않고 신청화면으로
-            else if (viewDonate && !viewDonate.classList.contains('hidden')) {
+                history.pushState(null, null, location.href);
+            } else if (viewDonate && !viewDonate.classList.contains('hidden')) {
                 window.switchView('register');
-                history.pushState(null, null, '#register');
-            }
-            // 3. 신청 화면에서 뒤로가기 누른 경우 -> 실수 방지 팝업
-            else {
+                history.pushState(null, null, location.href);
+            } else {
                 if (confirm("작성 중인 내용이 모두 초기화될 수 있습니다.\n정말 홈페이지를 나가시겠습니까?")) {
-                    window.isNavigatingAway = true;
-                    history.back(); // 확인 시 뒤로가기 허용
+                    isNavigatingAway = true;
+                    history.back();
                 } else {
-                    // 취소 시 현재 상태 복구 (튕김 방지)
-                    history.pushState(null, null, '#register'); 
+                    history.pushState(null, null, location.href);
                 }
             }
         });
 
-        // PC 환경에서 새로고침/창 닫기 방지 (관리자 모드가 아닐 때만 작동)
         window.addEventListener('beforeunload', function(e) {
             const viewAdmin = document.getElementById('view-admin');
             if (viewAdmin && viewAdmin.classList.contains('hidden')) {
