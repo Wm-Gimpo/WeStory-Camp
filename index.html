@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeStory Camp (위스캠프) 실시간 신청 및 관리 시스템</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -87,7 +87,6 @@
             </div>
 
             <!-- 메인 배너 (배경 이미지 적용) -->
-            <!-- 이 부분의 url('SOS02839_2.jpg')이 배경을 만들어줍니다. 파일명과 똑같아야 합니다. -->
             <div class="border border-blue-400 rounded-2xl p-6 sm:p-10 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-8 bg-no-repeat min-h-[320px] sm:min-h-[400px]" style="background-image: url('SOS02839_2.jpg'); background-size: cover; background-position: center 35%;">
                 <!-- 글씨가 잘 보이도록 배경을 살짝 어둡게 누르는 투명 오버레이 -->
                 <div class="absolute inset-0 bg-blue-900/40"></div>
@@ -98,9 +97,9 @@
                 <div class="w-48 sm:w-56 shrink-0 bg-white p-3 rounded-2xl shadow-xl border-4 border-white flex items-center justify-center transform rotate-[-2deg] hover:rotate-0 transition-transform duration-300 relative z-10">
                     <img src="unnamed.jpg" alt="WeStory Camp" class="w-full h-auto object-contain">
                 </div>
-                <div class="relative z-10 flex-1 text-center md:text-left text-white">
+                <div class="relative z-10 flex-1 text-center md:text-left text-white break-keep">
                     <span class="bg-white/20 text-blue-50 text-xs px-3 py-1.5 rounded-full font-semibold uppercase tracking-wider backdrop-blur-sm border border-white/30">2026 다음 세대 연합 캠프</span>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold mt-4 leading-tight drop-shadow-md break-keep">WeStory Camp<br>참가 등록</h1>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold mt-4 leading-tight drop-shadow-md break-keep">WeStory Camp<br class="sm:hidden"> 참가 등록</h1>
                     <p class="mt-3 text-blue-50 text-sm sm:text-base opacity-90 drop-shadow break-keep">교회의 미래인 다음 세대를 위한 위스캠프에 환영합니다! 작성하신 명단은 관리자 대시보드에 실시간으로 안전하게 자동 집계됩니다.</p>
                 </div>
             </div>
@@ -426,10 +425,10 @@
             <!-- 남녀 성비 요약 -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mt-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-                    <!-- 남녀 성비 -->
+                    <!-- 남녀 성비 (어린이, 청소년, 인솔자 3단 분리) -->
                     <div class="md:pr-8 pb-6 md:pb-0">
-                        <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-4"><i class="fa-solid fa-venus-mars text-rose-400 mr-1.5"></i>어린이/청소년 남녀 성비</h4>
-                        <div id="gender-ratio-container" class="space-y-3 px-2"></div>
+                        <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-4"><i class="fa-solid fa-venus-mars text-rose-400 mr-1.5"></i>그룹별 남녀 성비 상세</h4>
+                        <div id="gender-ratio-container" class="space-y-4 px-2"></div>
                     </div>
                     <!-- 연령별 분포 -->
                     <div class="md:pl-8 pt-6 md:pt-0">
@@ -471,7 +470,6 @@
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // 사용자가 제공한 파이어베이스 환경설정
         const firebaseConfig = {
             apiKey: "AIzaSyBq9IGezymAhQxk0LiXeCRgTeLjmM2mx20",
             authDomain: "westorycamp.firebaseapp.com",
@@ -488,7 +486,7 @@
         let studentRowIndex = 0;
         let leaderRowIndex = 0;
 
-        window.startApp = async function() {
+        async function startApp() {
             try {
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
@@ -507,7 +505,6 @@
                     window.showToast('error', '데이터 수신 실패. 데이터베이스 규칙을 확인하세요.');
                 });
 
-                // 설정(일정표 링크 등) 실시간 동기화
                 onSnapshot(doc(db, 'settings', 'general'), (docSnap) => {
                     const pdfBtn = document.getElementById('btn-schedule-pdf');
                     const adminInput = document.getElementById('admin-pdf-link');
@@ -524,10 +521,10 @@
                     }
                 });
             } catch (err) { console.error("Firebase load failed", err); }
-            window.initForm();
+            initForm();
         }
 
-        window.onload = function() { window.startApp(); };
+        window.onload = function() { startApp(); };
 
         window.showToast = function(type, message) {
             const container = document.getElementById('toast-container');
@@ -545,43 +542,7 @@
             if (e.key === 'Enter') window.verifyAdminPassword();
         });
 
-        // ==========================================
-        // [완벽 방어] 스마트폰 뒤로가기 앱 라우팅 로직
-        // ==========================================
-        let currentView = 'register';
-        let isLeaving = false;
-
-        // 모바일 브라우저의 무단 이탈을 막기 위해 첫 터치 시 히스토리 스택을 강제 장전합니다.
-        const initHistoryStack = function() {
-            if (!window.historyPushed) {
-                history.replaceState({ view: 'register' }, null, location.href);
-                history.pushState({ view: 'register' }, null, location.href);
-                window.historyPushed = true;
-            }
-        };
-        document.addEventListener('touchstart', initHistoryStack, { once: true });
-        document.addEventListener('click', initHistoryStack, { once: true });
-
-        // 화면 전환 껍데기 함수 (스택 제어용)
         window.switchView = function(view) {
-            if (currentView === view) return;
-            
-            if (view === 'admin') {
-                history.pushState({ view: 'admin' }, null, location.href);
-                window.executeSwitchView('admin');
-            } else if (view === 'register') {
-                if (currentView === 'admin') {
-                    // 관리자 모드에서 신청화면으로 돌아갈 땐 스택을 쌓지 않고 브라우저 백을 실행
-                    history.back();
-                } else {
-                    window.executeSwitchView('register');
-                }
-            }
-        };
-
-        // 실제 화면을 그리는 함수
-        window.executeSwitchView = function(view) {
-            currentView = view;
             document.getElementById('view-register').classList.add('hidden');
             document.getElementById('view-admin').classList.add('hidden');
             document.getElementById('btn-nav-register').classList.replace('bg-blue-600', 'bg-transparent');
@@ -598,49 +559,27 @@
                 document.getElementById('view-admin').classList.remove('hidden');
                 document.getElementById('btn-nav-admin').classList.replace('bg-transparent', 'bg-blue-600');
                 document.getElementById('btn-nav-admin').classList.replace('text-slate-600', 'text-white');
-                if(typeof window.syncDashboard === 'function') window.syncDashboard();
+                window.syncDashboard();
                 window.scrollTo(0,0);
             }
         };
-
-        // 스와이프(뒤로가기) 행동 감지 센서
-        window.addEventListener('popstate', function(event) {
-            if (isLeaving) return;
-
-            if (currentView === 'admin') {
-                // 1. 관리자 모드에서 뒤로가기 누름 -> 앱이 꺼지지 않고 신청화면으로 복귀!
-                window.executeSwitchView('register');
-            } 
-            else if (currentView === 'register') {
-                // 2. 신청화면에서 뒤로가기 누름 -> 이탈 시도 감지!
-                // 튕겨 나가는 것을 막기 위해 다시 현재 상태를 밀어넣어 버팀
-                history.pushState({ view: 'register' }, null, location.href);
-                
-                if (confirm("작성 중인 내용이 모두 초기화될 수 있습니다.\n정말 위스캠프 신청 화면을 나가시겠습니까?")) {
-                    isLeaving = true;
-                    history.go(-2); // 유저가 원하면 진짜로 나가게 허용해줌
-                }
-            }
-        });
-
-        // PC 탭 닫기 방어
-        window.addEventListener('beforeunload', function(e) {
-            if (currentView === 'register') {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });
-        // ==========================================
 
         window.openAdminAuth = function() {
             if (sessionStorage.getItem('westory_admin') === 'ok') window.switchView('admin');
             else { document.getElementById('admin-auth-modal').classList.remove('hidden'); document.getElementById('adminPasswordInput').focus(); }
         };
         window.closeAdminAuth = function() { document.getElementById('admin-auth-modal').classList.add('hidden'); document.getElementById('adminPasswordInput').value = ''; };
+        
         window.verifyAdminPassword = function() {
+            // ==========================================
+            // [비밀번호 변경 안내] 
+            // 아래의 '5352'를 원하시는 비밀번호로 변경하세요!
+            // ==========================================
             if (document.getElementById('adminPasswordInput').value === '0810') {
                 sessionStorage.setItem('westory_admin', 'ok');
-                window.closeAdminAuth(); window.switchView('admin'); window.showToast('success', '관리자 접속 완료!');
+                window.closeAdminAuth(); 
+                window.switchView('admin'); 
+                window.showToast('success', '관리자 접속 완료!');
             } else { window.showToast('error', '비밀번호가 틀렸습니다.'); }
         };
 
@@ -669,7 +608,7 @@
             tr.innerHTML = `
                 <td class="py-2 px-3 border-b text-sm row-idx text-center text-slate-400"></td>
                 <td class="py-2 px-3 border-b"><input type="text" class="sync-name w-full border rounded p-2 text-sm outline-none" value="${data.name}" required></td>
-                <td class="py-2 px-3 border-b"><select class="sync-gender w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="남" ${data.gender==='남'?'selected':''}>남</option><option value="여" ${data.gender==='여'?'selected':''}>여</option></select></td>
+                <td class="py-2 px-3 border-b"><select class="sync-gender w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="남" ${data.gender==='남'?'selected':''}>남</option><option value="여" ${data.gender==='여'?'selected':''}>여</option><option value="미정" ${data.gender==='미정'?'selected':''}>미정</option></select></td>
                 <td class="py-2 px-3 border-b"><select class="sync-type w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="어린이" ${data.type==='어린이'?'selected':''}>어린이</option><option value="청소년" ${data.type==='청소년'?'selected':''}>청소년</option></select></td>
                 <td class="py-2 px-3 border-b"><select class="sync-grade w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required>${window.getGradeOptions(data.type, data.grade)}</select></td>
                 <td class="py-2 px-3 border-b"><input type="text" class="sync-notes w-full border rounded p-2 text-sm outline-none" value="${data.notes}"></td>
@@ -686,7 +625,7 @@
                 <div class="text-xs font-bold text-slate-500 mb-2 card-idx"></div>
                 <div class="grid grid-cols-2 gap-2 mb-2">
                     <div><input type="text" class="sync-name w-full border rounded p-2 text-sm outline-none" placeholder="이름" value="${data.name}" required></div>
-                    <div><select class="sync-gender w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="남" ${data.gender==='남'?'selected':''}>남</option><option value="여" ${data.gender==='여'?'selected':''}>여</option></select></div>
+                    <div><select class="sync-gender w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="남" ${data.gender==='남'?'selected':''}>남</option><option value="여" ${data.gender==='여'?'selected':''}>여</option><option value="미정" ${data.gender==='미정'?'selected':''}>미정</option></select></div>
                 </div>
                 <div class="grid grid-cols-2 gap-2 mb-2">
                     <div><select class="sync-type w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="어린이" ${data.type==='어린이'?'selected':''}>어린이</option><option value="청소년" ${data.type==='청소년'?'selected':''}>청소년</option></select></div>
@@ -696,8 +635,8 @@
             `;
             cards.appendChild(card);
             
-            window.bindSync(`student-row-${studentRowIndex}`, `student-card-${studentRowIndex}`, true);
-            window.recalcIndex('student');
+            bindSync(`student-row-${studentRowIndex}`, `student-card-${studentRowIndex}`, true);
+            recalcIndex('student');
         };
 
         window.addLeaderRow = function(presetData = null) {
@@ -712,7 +651,7 @@
             tr.innerHTML = `
                 <td class="py-2 px-3 border-b text-sm row-idx text-center text-slate-400"></td>
                 <td class="py-2 px-3 border-b"><input type="text" class="sync-name w-full border rounded p-2 text-sm outline-none" value="${data.name}" required></td>
-                <td class="py-2 px-3 border-b"><select class="sync-gender w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="남" ${data.gender==='남'?'selected':''}>남</option><option value="여" ${data.gender==='여'?'selected':''}>여</option></select></td>
+                <td class="py-2 px-3 border-b"><select class="sync-gender w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="남" ${data.gender==='남'?'selected':''}>남</option><option value="여" ${data.gender==='여'?'selected':''}>여</option><option value="미정" ${data.gender==='미정'?'selected':''}>미정</option></select></td>
                 <td class="py-2 px-3 border-b"><select class="sync-title w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required>${titleOptions.replace(`value="${data.title}"`, `value="${data.title}" selected`)}</select></td>
                 <td class="py-2 px-3 border-b text-center"><input type="checkbox" class="sync-main w-5 h-5 text-blue-600 rounded cursor-pointer" ${data.isMain ? 'checked' : ''}></td>
                 <td class="py-2 px-3 border-b"><input type="text" class="sync-notes w-full border rounded p-2 text-sm outline-none" value="${data.notes}"></td>
@@ -729,7 +668,7 @@
                 <div class="text-xs font-bold text-slate-500 mb-2 card-idx"></div>
                 <div class="grid grid-cols-2 gap-2 mb-2">
                     <div><input type="text" class="sync-name w-full border rounded p-2 text-sm outline-none" placeholder="이름" value="${data.name}" required></div>
-                    <div><select class="sync-gender w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="남" ${data.gender==='남'?'selected':''}>남</option><option value="여" ${data.gender==='여'?'selected':''}>여</option></select></div>
+                    <div><select class="sync-gender w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required><option value="남" ${data.gender==='남'?'selected':''}>남</option><option value="여" ${data.gender==='여'?'selected':''}>여</option><option value="미정" ${data.gender==='미정'?'selected':''}>미정</option></select></div>
                 </div>
                 <div class="grid grid-cols-2 gap-2 mb-2 items-center">
                     <div><select class="sync-title w-full border rounded p-2 text-sm pr-8 bg-white outline-none" required>${titleOptions.replace(`value="${data.title}"`, `value="${data.title}" selected`)}</select></div>
@@ -739,17 +678,17 @@
             `;
             cards.appendChild(card);
             
-            window.bindSync(`leader-row-${leaderRowIndex}`, `leader-card-${leaderRowIndex}`);
-            window.recalcIndex('leader');
+            bindSync(`leader-row-${leaderRowIndex}`, `leader-card-${leaderRowIndex}`);
+            recalcIndex('leader');
         };
 
         window.removeRow = function(type, idx) {
             document.getElementById(`${type}-row-${idx}`).remove();
             document.getElementById(`${type}-card-${idx}`).remove();
-            window.recalcIndex(type);
+            recalcIndex(type);
         };
 
-        window.updateGradeDropdowns = function(row, card, typeValue) {
+        function updateGradeDropdowns(row, card, typeValue) {
             const rGrade = row.querySelector('.sync-grade');
             const cGrade = card.querySelector('.sync-grade');
             const newOptions = window.getGradeOptions(typeValue);
@@ -757,7 +696,7 @@
             if (cGrade) { cGrade.innerHTML = newOptions; cGrade.value = ""; }
         }
 
-        window.bindSync = function(rowId, cardId, isStudent = false) {
+        function bindSync(rowId, cardId, isStudent = false) {
             const row = document.getElementById(rowId);
             const card = document.getElementById(cardId);
             const classes = ['sync-name', 'sync-gender', 'sync-type', 'sync-grade', 'sync-title', 'sync-notes'];
@@ -767,12 +706,12 @@
                     const eventType = (cls === 'sync-type' || cls === 'sync-grade' || cls === 'sync-gender' || cls === 'sync-title') ? 'change' : 'input';
                     rEl.addEventListener(eventType, () => { 
                         cEl.value = rEl.value;
-                        if (cls === 'sync-type' && isStudent) window.updateGradeDropdowns(row, card, rEl.value);
+                        if (cls === 'sync-type' && isStudent) updateGradeDropdowns(row, card, rEl.value);
                         window.updateLiveCounters(); 
                     });
                     cEl.addEventListener(eventType, () => { 
                         rEl.value = cEl.value;
-                        if (cls === 'sync-type' && isStudent) window.updateGradeDropdowns(row, card, cEl.value);
+                        if (cls === 'sync-type' && isStudent) updateGradeDropdowns(row, card, cEl.value);
                         window.updateLiveCounters(); 
                     });
                 }
@@ -784,7 +723,7 @@
             }
         }
 
-        window.recalcIndex = function(type) {
+        function recalcIndex(type) {
             const label = type === 'student' ? '명단' : '인솔자';
             let count = 1;
             document.getElementById(`${type}-tbody`).querySelectorAll('tr').forEach(tr => tr.querySelector('.row-idx').innerText = count++);
@@ -804,7 +743,7 @@
             document.getElementById('counter-total').innerText = (child + stu + lead) + "명";
         };
 
-        window.initForm = function() {
+        function initForm() {
             window.addStudentRow(); window.addLeaderRow();
         }
 
@@ -843,7 +782,7 @@
             document.getElementById('westoryForm').reset();
             document.getElementById('student-tbody').innerHTML = ''; document.getElementById('student-cards').innerHTML = '';
             document.getElementById('leader-tbody').innerHTML = ''; document.getElementById('leader-cards').innerHTML = '';
-            window.initForm();
+            initForm();
             document.getElementById('submit-btn-text').innerText = "위스캠프 신청서 최종 제출";
             document.getElementById('form-mode-badge').classList.add('hidden');
             window.updateLiveCounters();
@@ -938,9 +877,21 @@
                 window.showToast('success', '✅ 전액 완납 처리되었습니다.');
             } catch(e) { window.showToast('error', '처리 실패: 권한을 확인하세요.'); }
         };
+
+        window.copyFixedLink = function() {
+            const input = document.getElementById('share-link-input');
+            input.select(); input.setSelectionRange(0, 99999);
+            try { document.execCommand('copy'); window.showToast('success', '공식 신청 링크가 안전하게 복사되었습니다!'); } 
+            catch(err) { window.showToast('error', '복사 실패'); }
+        };
+
         window.syncDashboard = function syncDashboard() {
-            let tc=0, ts=0, tl=0, totalMale=0, totalFemale=0;
-            let childMale=0, childFemale=0, studentMale=0, studentFemale=0;
+            let tc=0, ts=0, tl=0;
+            // 각 그룹별 성비 카운트 변수 (남, 여, 미정)
+            let childMale=0, childFemale=0, childUnknown=0;
+            let youthMale=0, youthFemale=0, youthUnknown=0;
+            let leaderMale=0, leaderFemale=0, leaderUnknown=0;
+            
             let elemCount=0, midCount=0, highCount=0, otherCount=0;
             let totalExpectedFee = 0, totalCollectedFee = 0;
             let totalPaidChurches = 0;
@@ -982,22 +933,23 @@
                     paymentStatusBadge = '<span class="px-2 py-1 bg-slate-100 text-slate-500 text-[10px] rounded font-bold border border-slate-200">⏳ 미납</span>';
                 }
 
-                // 성비 및 연령대 계산
+                // 성비 및 연령대 계산 (어린이, 청소년, 인솔자 각각 미정 포함)
                 if(r.students) r.students.forEach(s => { 
-                    if(s.gender === '남') totalMale++; else if(s.gender === '여') totalFemale++; 
-                    
-                    if(s.type === '어린이') {
-                        if(s.gender === '남') childMale++; else if(s.gender === '여') childFemale++;
-                    } else if(s.type === '청소년') {
-                        if(s.gender === '남') studentMale++; else if(s.gender === '여') studentFemale++;
+                    if (s.type === '어린이') {
+                        if(s.gender === '남') childMale++; else if(s.gender === '여') childFemale++; else childUnknown++;
+                    } else if (s.type === '청소년') {
+                        if(s.gender === '남') youthMale++; else if(s.gender === '여') youthFemale++; else youthUnknown++;
                     }
-
+                    
                     if(s.grade.startsWith('초')) elemCount++;
                     else if(s.grade.startsWith('중')) midCount++;
                     else if(s.grade.startsWith('고')) highCount++;
                     else otherCount++;
                 });
-                if(r.leaders) r.leaders.forEach(l => { if(l.gender === '남') totalMale++; else if(l.gender === '여') totalFemale++; });
+                
+                if(r.leaders) r.leaders.forEach(l => { 
+                    if(l.gender === '남') leaderMale++; else if(l.gender === '여') leaderFemale++; else leaderUnknown++; 
+                });
 
                 // 회비 테이블 렌더링 (필터 적용 및 원클릭 버튼/UX 적용)
                 let showFeeRow = true;
@@ -1006,13 +958,10 @@
                 if (feeFilter === 'unpaid' && isFullyPaid) showFeeRow = false;
 
                 if (showFeeRow) {
-                    // 완납 여부에 따른 완납처리 버튼 동적 생성 (모바일 직관성 강화)
                     let fullPayBtnHTML = '';
                     if (isFullyPaid) {
-                        // 이미 완납된 경우: 회색 비활성화 버튼
                         fullPayBtnHTML = `<button disabled class="bg-slate-100 text-slate-400 px-2 py-1 rounded text-[10px] font-bold border border-slate-200 cursor-not-allowed shrink-0">완납됨</button>`;
                     } else {
-                        // 완납 전인 경우: 초록색 활성화 버튼
                         fullPayBtnHTML = `<button onclick="window.markAsFullyPaid('${r.id}', ${expectedFee})" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[10px] font-bold border border-emerald-200 transition-colors shrink-0">완납처리</button>`;
                     }
 
@@ -1121,40 +1070,46 @@
             document.getElementById('stat-top-paid-churches').innerText = totalPaidChurches + "개";
             document.getElementById('stat-top-paid-amount').innerText = totalCollectedFee.toLocaleString() + "원";
 
-            // 성비 바 (어린이 / 청소년 분할)
-            const childTotal = childMale + childFemale;
-            let cMalePct = childTotal === 0 ? 0 : Math.round((childMale / childTotal) * 100);
-            let cFemalePct = childTotal === 0 ? 0 : Math.round((childFemale / childTotal) * 100);
+            // 3단 분리된 성비 바 렌더링 함수
+            const childTotal = childMale + childFemale + childUnknown;
+            const youthTotal = youthMale + youthFemale + youthUnknown;
+            const leaderTotal = leaderMale + leaderFemale + leaderUnknown;
 
-            const studentTotal = studentMale + studentFemale;
-            let sMalePct = studentTotal === 0 ? 0 : Math.round((studentMale / studentTotal) * 100);
-            let sFemalePct = studentTotal === 0 ? 0 : Math.round((studentFemale / studentTotal) * 100);
+            const childMalePct = childTotal === 0 ? 0 : Math.round((childMale/childTotal)*100);
+            const childFemalePct = childTotal === 0 ? 0 : Math.round((childFemale/childTotal)*100);
+            const childUnknownPct = childTotal === 0 ? 0 : Math.round((childUnknown/childTotal)*100);
 
-            document.getElementById('gender-ratio-container').innerHTML = `
-                <div class="mb-4">
-                    <div class="flex justify-between items-end mb-1">
-                        <span class="text-xs font-bold text-amber-600">어린이 성비</span>
-                        <div class="text-[11px] font-bold">
-                            <span class="text-blue-500">남 ${childMale}명</span> <span class="text-slate-300 mx-1">|</span> <span class="text-rose-500">여 ${childFemale}명</span>
+            const youthMalePct = youthTotal === 0 ? 0 : Math.round((youthMale/youthTotal)*100);
+            const youthFemalePct = youthTotal === 0 ? 0 : Math.round((youthFemale/youthTotal)*100);
+            const youthUnknownPct = youthTotal === 0 ? 0 : Math.round((youthUnknown/youthTotal)*100);
+
+            const leaderMalePct = leaderTotal === 0 ? 0 : Math.round((leaderMale/leaderTotal)*100);
+            const leaderFemalePct = leaderTotal === 0 ? 0 : Math.round((leaderFemale/leaderTotal)*100);
+            const leaderUnknownPct = leaderTotal === 0 ? 0 : Math.round((leaderUnknown/leaderTotal)*100);
+
+            function renderGenderBar(title, m, f, u, total, mp, fp, up) {
+                return `
+                    <div class="mb-4 last:mb-0">
+                        <div class="flex justify-between items-end mb-1">
+                            <div class="text-xs font-bold text-slate-700">${title} (총 ${total}명)</div>
+                            <div class="flex space-x-2 text-[10px]">
+                                <span class="text-blue-600 font-bold">남 ${m}명 (${mp}%)</span>
+                                <span class="text-rose-500 font-bold">여 ${f}명 (${fp}%)</span>
+                                ${u > 0 ? `<span class="text-slate-500 font-bold">미정 ${u}명 (${up}%)</span>` : ''}
+                            </div>
                         </div>
-                    </div>
-                    <div class="w-full bg-slate-100 rounded-full h-3 flex overflow-hidden shadow-inner border border-slate-200">
-                        <div class="bg-gradient-to-r from-blue-400 to-blue-500 h-3 transition-all duration-1000 ease-out" style="width: ${cMalePct}%"></div>
-                        <div class="bg-gradient-to-r from-rose-400 to-rose-500 h-3 transition-all duration-1000 ease-out" style="width: ${cFemalePct}%"></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="flex justify-between items-end mb-1">
-                        <span class="text-xs font-bold text-blue-600">청소년 성비</span>
-                        <div class="text-[11px] font-bold">
-                            <span class="text-blue-500">남 ${studentMale}명</span> <span class="text-slate-300 mx-1">|</span> <span class="text-rose-500">여 ${studentFemale}명</span>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5 flex overflow-hidden shadow-inner border border-slate-200">
+                            <div class="bg-blue-500 h-2.5 transition-all duration-1000 ease-out" style="width: ${mp}%"></div>
+                            <div class="bg-rose-500 h-2.5 transition-all duration-1000 ease-out" style="width: ${fp}%"></div>
+                            <div class="bg-slate-400 h-2.5 transition-all duration-1000 ease-out" style="width: ${up}%"></div>
                         </div>
-                    </div>
-                    <div class="w-full bg-slate-100 rounded-full h-3 flex overflow-hidden shadow-inner border border-slate-200">
-                        <div class="bg-gradient-to-r from-blue-400 to-blue-500 h-3 transition-all duration-1000 ease-out" style="width: ${sMalePct}%"></div>
-                        <div class="bg-gradient-to-r from-rose-400 to-rose-500 h-3 transition-all duration-1000 ease-out" style="width: ${sFemalePct}%"></div>
-                    </div>
-                </div>`;
+                    </div>`;
+            }
+
+            document.getElementById('gender-ratio-container').innerHTML = 
+                renderGenderBar('👦 어린이', childMale, childFemale, childUnknown, childTotal, childMalePct, childFemalePct, childUnknownPct) +
+                renderGenderBar('🧑‍🎓 청소년', youthMale, youthFemale, youthUnknown, youthTotal, youthMalePct, youthFemalePct, youthUnknownPct) +
+                renderGenderBar('👨‍🏫 인솔자', leaderMale, leaderFemale, leaderUnknown, leaderTotal, leaderMalePct, leaderFemalePct, leaderUnknownPct);
 
             // 연령별(초/중/고) 바
             const totalStudents = elemCount + midCount + highCount + otherCount;
@@ -1175,14 +1130,49 @@
                 </div>
                 <div class="text-[10px] text-slate-400 mt-1.5 text-right font-medium">※ 전체 학생 ${totalStudents}명 기준 (어린이/청소년)</div>
             `;
-        }
-
-        window.copyFixedLink = function() {
-            const input = document.getElementById('share-link-input');
-            input.select(); input.setSelectionRange(0, 99999);
-            try { document.execCommand('copy'); window.showToast('success', '공식 신청 링크가 안전하게 복사되었습니다!'); } 
-            catch(err) { window.showToast('error', '복사 실패'); }
         };
+
+        // 모바일 뒤로가기 및 새로고침 방지 로직 (완전체)
+        let isNavigatingAway = false;
+        
+        const initHistoryStack = function() {
+            if (!window.historyPushed) {
+                history.pushState(null, null, location.href);
+                window.historyPushed = true;
+            }
+        };
+        document.body.addEventListener('touchstart', initHistoryStack, { once: true });
+        document.body.addEventListener('click', initHistoryStack, { once: true });
+
+        window.addEventListener('popstate', function(event) {
+            if (isNavigatingAway) return;
+
+            const viewAdmin = document.getElementById('view-admin');
+            
+            // 1. 관리자 모드에서 스와이프(뒤로가기) 누름 -> 튕기지 않고 신청화면으로 복귀
+            if (viewAdmin && !viewAdmin.classList.contains('hidden')) {
+                window.switchView('register');
+                history.pushState(null, null, location.href);
+            } 
+            // 2. 신청 화면에서 스와이프(뒤로가기) 누름 -> 실수 방지 팝업
+            else {
+                if (confirm("작성 중인 내용이 모두 초기화될 수 있습니다.\n정말 뒤로 가시겠습니까?")) {
+                    isNavigatingAway = true;
+                    history.back(); // 진짜 바탕화면으로 나가기
+                } else {
+                    history.pushState(null, null, location.href); // 안 나가고 버티기
+                }
+            }
+        });
+
+        // PC 환경에서 새로고침/창 닫기 방지
+        window.addEventListener('beforeunload', function(e) {
+            const viewAdmin = document.getElementById('view-admin');
+            if (viewAdmin && viewAdmin.classList.contains('hidden')) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
 
     </script>
 </body>
