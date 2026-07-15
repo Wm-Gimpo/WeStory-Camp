@@ -401,15 +401,15 @@
                 <div class="bg-slate-50 rounded-2xl border border-slate-200 p-4 text-center col-span-2 sm:col-span-1 shadow-sm"><span class="block text-[10px] font-semibold text-slate-500">누적 총 합계</span><span id="stat-grand-total" class="text-2xl font-black text-emerald-600">0명</span></div>
             </div>
 
-            <!-- 입금 현황 요약 위젯 -->
+            <!-- 재정 통합 요약 위젯 -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                <div class="bg-emerald-50 rounded-2xl border border-emerald-200 p-4 shadow-sm flex justify-between px-6 items-center">
-                    <div class="flex space-x-2"><i class="fa-solid fa-check-to-slot text-emerald-600 text-lg"></i><span class="block text-sm font-bold text-emerald-800">참가비 입금된 교회 수</span></div>
-                    <span id="stat-top-paid-churches" class="text-2xl font-black text-emerald-700">0개</span>
+                <div class="bg-indigo-50 rounded-2xl border border-indigo-200 p-4 shadow-sm flex justify-between px-6 items-center">
+                    <div class="flex space-x-2"><i class="fa-solid fa-file-invoice-dollar text-indigo-600 text-lg"></i><span class="block text-sm font-bold text-indigo-800">캠프 + 후원 총 예상 금액</span></div>
+                    <span id="stat-grand-expected-amount" class="text-2xl font-black text-indigo-700">0원</span>
                 </div>
-                <div class="bg-pink-50 rounded-2xl border border-pink-200 p-4 shadow-sm flex justify-between px-6 items-center">
-                    <div class="flex space-x-2"><i class="fa-solid fa-hand-holding-heart text-pink-600 text-lg"></i><span class="block text-sm font-bold text-pink-800">단순 후원금 입금된 분</span></div>
-                    <span id="stat-top-paid-donators" class="text-2xl font-black text-pink-700">0분</span>
+                <div class="bg-blue-50 rounded-2xl border border-blue-200 p-4 shadow-sm flex justify-between px-6 items-center">
+                    <div class="flex space-x-2"><i class="fa-solid fa-hand-holding-dollar text-blue-600 text-lg"></i><span class="block text-sm font-bold text-blue-800">캠프 + 후원 실제 입금 총액</span></div>
+                    <span id="stat-grand-collected-amount" class="text-2xl font-black text-blue-700">0원</span>
                 </div>
             </div>
 
@@ -985,11 +985,9 @@
             } catch(err) { window.showToast('error', '제출 실패! 파이어베이스 연결을 확인하세요.'); }
         };
 
-        // 완벽하게 다듬어진 후원금 제출 함수 (빈 값이나 undefined를 안전하게 처리)
         window.handleDonateSubmit = async function(e) {
             e.preventDefault();
             try {
-                // 각 요소의 값이 비어있어도 에러가 나지 않도록 방어 코드 작성
                 const nameEl = document.getElementById('donatorName');
                 const phoneEl = document.getElementById('donatorPhone');
                 const amountEl = document.getElementById('donateAmount');
@@ -1007,7 +1005,6 @@
                     leaderPhone: donatorPhoneStr,
                     donationAmount: donateAmountNum,
                     notes: donateMsgStr,
-                    // 파이어베이스에 undefined 에러가 발생하지 않도록 빈 값 세팅
                     churchAddress: '', leaderName: '', leaderGender: '', leaderTitle: '',
                     students: [], leaders: [], childrenCount: 0, studentCount: 0, leaderCount: 0
                 };
@@ -1086,8 +1083,6 @@
             let totalCollectedDonation = 0; // 단순 후원금 실제 입금 총액
             
             let totalCampChurches = 0;
-            let totalPaidChurches = 0; // 캠프 입금 건수
-            let totalPaidDonators = 0; // 후원 입금 건수
             
             const searchKeyword = (document.getElementById('adminSearchInput') ? document.getElementById('adminSearchInput').value.toLowerCase() : "");
             const feeFilter = document.getElementById('feeFilterSelect') ? document.getElementById('feeFilterSelect').value : 'all';
@@ -1136,11 +1131,9 @@
                 if (paidAmt >= expectedFee && expectedFee > 0) {
                     paymentStatusBadge = '<span class="px-2 py-1 bg-blue-100 text-blue-700 text-[10px] rounded font-bold border border-blue-200">✅ 완납</span>';
                     isFullyPaid = true;
-                    if (isDonation) totalPaidDonators++; else totalPaidChurches++;
                 } else if (paidAmt > 0) {
                     paymentStatusBadge = '<span class="px-2 py-1 bg-amber-100 text-amber-700 text-[10px] rounded font-bold border border-amber-200">⚠️ 부분납</span>';
                     isPartial = true;
-                    if (isDonation) totalPaidDonators++; else totalPaidChurches++;
                 } else {
                     paymentStatusBadge = '<span class="px-2 py-1 bg-slate-100 text-slate-500 text-[10px] rounded font-bold border border-slate-200">⏳ 미납</span>';
                 }
@@ -1335,8 +1328,11 @@
             const elExpDon = document.getElementById('stat-total-donation'); if(elExpDon) elExpDon.innerText = totalPledgedDonation.toLocaleString() + "원";
             const elColDon = document.getElementById('stat-total-collected-donation'); if(elColDon) elColDon.innerText = totalCollectedDonation.toLocaleString() + "원";
             
-            const elPaidChurch = document.getElementById('stat-top-paid-churches'); if(elPaidChurch) elPaidChurch.innerText = totalPaidChurches + "개";
-            const elPaidDon = document.getElementById('stat-top-paid-donators'); if(elPaidDon) elPaidDon.innerText = totalPaidDonators + "분";
+            // 전체 재정 통합본 업데이트 (캠프참가비 + 후원금 총합)
+            const grandExpected = totalExpectedCampFee + totalPledgedDonation;
+            const grandCollected = totalCollectedCampFee + totalCollectedDonation;
+            const elGrandExp = document.getElementById('stat-grand-expected-amount'); if(elGrandExp) elGrandExp.innerText = grandExpected.toLocaleString() + "원";
+            const elGrandCol = document.getElementById('stat-grand-collected-amount'); if(elGrandCol) elGrandCol.innerText = grandCollected.toLocaleString() + "원";
 
             // 성비 바 렌더링 함수
             const childTotal = childMale + childFemale + childUnknown;
