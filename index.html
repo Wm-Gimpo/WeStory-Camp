@@ -589,6 +589,30 @@
                         </div>
                     </form>
                     
+                    <!-- 스탭 검색 및 필터 위젯 -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4 bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-inner">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-bold text-slate-500"><i class="fa-solid fa-filter"></i> 필터:</span>
+                            <select id="staffRoleFilter" onchange="window.syncDashboard()" class="rounded-lg border border-slate-200 py-1.5 px-2 text-xs outline-none bg-white text-slate-700 cursor-pointer shadow-sm">
+                                <option value="all">구분 전체보기</option>
+                                <option value="총괄">총괄</option>
+                                <option value="WM">WM</option>
+                                <option value="예배팀">예배팀</option>
+                                <option value="STAFF">STAFF</option>
+                            </select>
+                            <select id="staffGroupFilter" onchange="window.syncDashboard()" class="rounded-lg border border-slate-200 py-1.5 px-2 text-xs outline-none bg-white text-slate-700 cursor-pointer shadow-sm">
+                                <option value="all">소속 전체보기</option>
+                                <option value="어린이">어린이</option>
+                                <option value="청소년">청소년</option>
+                                <option value="기타">기타</option>
+                            </select>
+                        </div>
+                        <div class="relative w-full md:w-56">
+                            <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400 pointer-events-none"><i class="fa-solid fa-magnifying-glass text-[10px]"></i></span>
+                            <input type="text" id="staffSearchInput" oninput="window.syncDashboard()" placeholder="이름으로 스탭 검색..." class="pl-7 w-full rounded-lg border border-slate-200 py-1.5 px-3 text-xs outline-none focus:border-blue-500 transition-all shadow-sm">
+                        </div>
+                    </div>
+
                     <!-- 스탭 명단 표 -->
                     <div class="overflow-x-auto max-h-[350px] overflow-y-auto">
                         <table class="w-full text-left text-xs border-collapse whitespace-nowrap">
@@ -1239,6 +1263,8 @@
             // 스탭 표
             const staffBody = document.getElementById('staff-table-body'); if(staffBody) staffBody.innerHTML = '';
 
+            let staffArray = []; // 스탭 정렬 및 필터링을 위한 임시 배열
+
             registrations.forEach(r => {
                 const isDonation = r.type === 'donation';
                 const isStaff = r.type === 'staff';
@@ -1250,23 +1276,7 @@
                     totalStaffsCount++;
                     if(r.staffGender === '남') staffMale++; else if(r.staffGender === '여') staffFemale++; else staffUnknown++;
 
-                    if (staffBody) {
-                        let settingBadge = r.staffSetting === 'O' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-rose-100 text-rose-700 border border-rose-200';
-                        
-                        staffBody.innerHTML += `
-                            <tr class="hover:bg-slate-50 transition-colors">
-                                <td class="py-2.5 px-3"><span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-[11px] font-bold border border-slate-200 shadow-sm">${r.staffRole}</span></td>
-                                <td class="py-2.5 px-3 font-bold text-slate-800">${r.staffName}</td>
-                                <td class="py-2.5 px-3 text-slate-600 font-medium">${r.staffGender}</td>
-                                <td class="py-2.5 px-3"><span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md text-[11px] font-bold border border-blue-200 shadow-sm">${r.staffGroup}</span></td>
-                                <td class="py-2.5 px-3 text-center"><span class="px-3 py-1 rounded-md text-[11px] font-black shadow-sm ${settingBadge}">${r.staffSetting}</span></td>
-                                <td class="py-2.5 px-3 text-center">
-                                    <button onclick="window.editStaff('${r.id}')" class="text-amber-500 hover:text-amber-600 px-2 transition-colors"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button onclick="window.deleteStaff('${r.id}')" class="text-rose-500 hover:text-rose-600 px-2 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
-                                </td>
-                            </tr>
-                        `;
-                    }
+                    staffArray.push(r);
                     return; // 스탭은 여기서 종료 (아래 캠프비, 인원 통계에 절대 섞이지 않음)
                 }
                 // ============================================
@@ -1484,6 +1494,52 @@
                     </div>`;
                 }
             });
+
+            // ============================================
+            // [신규] 스탭(Staff) 필터, 검색 및 정렬 렌더링
+            // ============================================
+            if (staffBody) {
+                const staffSearchKeyword = document.getElementById('staffSearchInput') ? document.getElementById('staffSearchInput').value.toLowerCase() : "";
+                const staffRoleFilter = document.getElementById('staffRoleFilter') ? document.getElementById('staffRoleFilter').value : "all";
+                const staffGroupFilter = document.getElementById('staffGroupFilter') ? document.getElementById('staffGroupFilter').value : "all";
+
+                // 정렬 순서 우선순위 부여 (총괄 -> WM -> 예배팀 -> STAFF)
+                const roleOrder = { '총괄': 1, 'WM': 2, '예배팀': 3, 'STAFF': 4 };
+
+                // 1. 검색어 및 드롭다운 필터 적용
+                let filteredStaff = staffArray.filter(r => {
+                    let matchSearch = !staffSearchKeyword || (r.staffName && r.staffName.toLowerCase().includes(staffSearchKeyword));
+                    let matchRole = staffRoleFilter === 'all' || r.staffRole === staffRoleFilter;
+                    let matchGroup = staffGroupFilter === 'all' || r.staffGroup === staffGroupFilter;
+                    return matchSearch && matchRole && matchGroup;
+                });
+
+                // 2. 지정된 역할 순서대로 정렬
+                filteredStaff.sort((a, b) => {
+                    const orderA = roleOrder[a.staffRole] || 99;
+                    const orderB = roleOrder[b.staffRole] || 99;
+                    if (orderA !== orderB) return orderA - orderB; // 1순위: 직분
+                    return (a.staffName || '').localeCompare(b.staffName || ''); // 2순위: 가나다 이름순
+                });
+
+                // 3. 정렬된 데이터를 표에 출력
+                filteredStaff.forEach(r => {
+                    let settingBadge = r.staffSetting === 'O' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-rose-100 text-rose-700 border border-rose-200';
+                    staffBody.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-2.5 px-3"><span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-[11px] font-bold border border-slate-200 shadow-sm">${r.staffRole}</span></td>
+                            <td class="py-2.5 px-3 font-bold text-slate-800">${r.staffName}</td>
+                            <td class="py-2.5 px-3 text-slate-600 font-medium">${r.staffGender}</td>
+                            <td class="py-2.5 px-3"><span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md text-[11px] font-bold border border-blue-200 shadow-sm">${r.staffGroup}</span></td>
+                            <td class="py-2.5 px-3 text-center"><span class="px-3 py-1 rounded-md text-[11px] font-black shadow-sm ${settingBadge}">${r.staffSetting}</span></td>
+                            <td class="py-2.5 px-3 text-center">
+                                <button onclick="window.editStaff('${r.id}')" class="text-amber-500 hover:text-amber-600 px-2 transition-colors"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="window.deleteStaff('${r.id}')" class="text-rose-500 hover:text-rose-600 px-2 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
 
             // 숫자 업데이트 (스탭 총원 배지 업데이트)
             const elTotalStaffs = document.getElementById('stat-total-staffs');
