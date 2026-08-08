@@ -1239,13 +1239,23 @@
             const onsiteList = document.getElementById('onsite-church-list'); if(onsiteList) onsiteList.innerHTML = '';
 
             let staffArray = [];
-            let sortedRegistrations = [...registrations].sort((a, b) => (a.churchName || '').localeCompare(b.churchName || ''));
-            let donationIdx = 1;
+             let sortedRegistrations = [...registrations].sort((a, b) => {
+                const isDonationA = a.type === 'donation';
+                const isDonationB = b.type === 'donation';
+                
+                if (isDonationA && isDonationB) {
+                    const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                    const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                    return dateA - dateB; // 후원은 먼저 접수된 사람이 위에 오도록 고정 (1, 2, 3...)
+                } else if (!isDonationA && !isDonationB) {
+                    return (a.churchName || '').localeCompare(b.churchName || ''); // 캠프 명단은 가나다순 유지
+                }
+                return (a.type || '').localeCompare(b.type || '');
+            });
 
             sortedRegistrations.forEach(r => {
                 const isDonation = r.type === 'donation';
                 const isStaff = r.type === 'staff';
-                const isCamp = !isDonation && !isStaff;
 
                 if (isStaff) {
                     totalStaffsCount++;
